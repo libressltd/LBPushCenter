@@ -1,0 +1,25 @@
+{
+    "name": "libressltd/lbpushcenter",
+    "description": "Push notification center",
+    "type": "library",
+    "require": {
+        "davibennun/laravel-push-notification": "dev-master",
+        "acacha/admin-lte-template-laravel": "*",
+        "libressltd/lbform": "*",
+        "guzzlehttp/guzzle": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LIBRE SS Ltd",
+            "email": "contact@libreteam.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LIBRESSLtd\\LBPushCenter\\": "src/"
+        },
+        "classmap": ["src/controllers"]
+    },
+    "minimum-stability": "dev"
+}
