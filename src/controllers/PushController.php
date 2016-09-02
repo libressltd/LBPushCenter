@@ -42,12 +42,15 @@ class PushController extends Controller
      */
     public function store(Request $request)
     {
-        $device_token = $request->device_token;
-        $device_type = $request->device_type;
-        $message = $request->message;
+        foreach ($request->device_items as $device)
+        {
+            $device_token = $device->device_token;
+            $device_type = $device->device_type;
+            $message = $device->message;
 
-        dispatch(new PushNotificationJob($device_token, $device_type, $message));
-        return array($device_token, $device_type, $message);
+            dispatch(new PushNotificationJob($device_token, $device_type, $message));
+        }
+        return 1;
     }
 
     /**
