@@ -17,7 +17,7 @@ class LBPushCenterServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/views', 'dp');
 		$this->publishes([
 	        __DIR__.'/jobs' => base_path('app/Jobs'),
-	    ], 'deeppermission');
+	    ], 'lbpushcenter');
     }
 
     /**

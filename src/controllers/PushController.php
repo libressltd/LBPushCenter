@@ -39,12 +39,14 @@ class PushController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreatePermission $request)
+    public function store(Request $request)
     {
-    	foreach ($request->push as $push)
-		{
-			
-		}
+        $device_token = $request->device_token;
+        $device_type = $request->device_type;
+        $message = $request->message;
+
+        dispatch(new PushNotificationJob($device_token, $device_type, $message));
+        return array($device_token, $device_type, $message);
     }
 
     /**
@@ -75,7 +77,7 @@ class PushController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CreatePermission $request, $id)
+    public function update(Request $request, $id)
     {
     	
     }
