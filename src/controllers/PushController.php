@@ -44,9 +44,9 @@ class PushController extends Controller
     {
         foreach ($request->device_items as $device)
         {
-            $device_token = $device->device_token;
-            $device_type = $device->device_type;
-            $message = $device->message;
+            $device_token = $device["device_token"];
+            $device_type = $device["device_type"];
+            $message = $device["message"];
 
             dispatch(new PushNotificationJob($device_token, $device_type, $message));
         }

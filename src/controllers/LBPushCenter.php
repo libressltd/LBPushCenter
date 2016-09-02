@@ -1,28 +1,25 @@
+
 <?php
 
 namespace LIBRESSLtd\LBPushCenter\Controllers;
 use GuzzleHttp\Client;
 
-class LBPushCenter {
-	
-	static push($devices, $message)
+class LBPushCenter
+{
+	static function push($devices, $message)
 	{
 		$push_items = array();
 		foreach ($devices as $device)
-		{
-			$push_items = array(
-				"device_type" => $device["type"],
-				"device_token" => $device["token"],
-				"message" => $message
-			);
-		}
+        {
+                $push_items[] = array(
+                        "device_type" => $device["type"],
+                        "device_token" => $device["token"],
+                        "message" => $message
+                );
+        }
+        $push_string = json_encode(["device_items" => $push_items]);
 
-		$client = new Client();
-        $res = $client->request('POST', 'http://ltm.libre.com.vn:20000/services/pushcenter/push', [
-            'push_items' => $push_items
-        ]);
-        echo $res->getStatusCode();
-        echo $res->getHeader('content-type');
-        echo $res->getBody();
-	}
+        $client = new Client();
+	    $res = $client->postAsync('http://ltm.libre.com.vn:20000/services/pushcenter/push', ['json' => ['device_items' => $push_items]]);
+    }
 }
