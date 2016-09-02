@@ -7,14 +7,16 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+use PushNotification;
+
 class PushNotificationJob extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
 
-	protect $device_token;
-	protect $device_type;
-	protect $message;
+	protected $device_token;
+	protected $device_type;
+	protected $message;
 	
 	
     /**

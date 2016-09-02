@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests;
+use App\Jobs\PushNotificationJob;
 
 class PushController extends Controller
 {
