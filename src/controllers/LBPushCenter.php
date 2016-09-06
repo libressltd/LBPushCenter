@@ -17,8 +17,6 @@ class LBPushCenter
                         "message" => $message
                 );
         }
-        $push_string = json_encode(["device_items" => $push_items]);
-
         $client = new Client();
 	    $res = $client->postAsync('http://ltm.libre.com.vn:20000/services/pushcenter/push', ['json' => ['device_items' => $push_items]]);
     }
