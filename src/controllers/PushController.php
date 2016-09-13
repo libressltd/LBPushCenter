@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests;
 use App\Jobs\PushNotificationJob;
+use App\Jobs\SaveInformationJob;
 
 class PushController extends Controller
 {
@@ -42,14 +43,7 @@ class PushController extends Controller
      */
     public function store(Request $request)
     {
-        foreach ($request->device_items as $device)
-        {
-            $device_token = $device["device_token"];
-            $device_type = $device["device_type"];
-            $message = $device["message"];
-
-            dispatch(new PushNotificationJob($device_token, $device_type, $message));
-        }
+        dispatch(new SaveInformationJob($request->device_items));
         return 1;
     }
 
