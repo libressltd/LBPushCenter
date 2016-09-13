@@ -17,6 +17,6 @@ class LBPushCenter
                 );
         }
         $client = new Client();
-	    $res = $client->postAsync('http://ltm.libre.com.vn:20000/services/pushcenter/push', ['json' => ['device_items' => $push_items]]);
+	    $res = $client->postAsync('http://ltm.libre.com.vn:8080/services/pushcenter/push', ['json' => ['device_items' => $push_items]]);
     }
 }
