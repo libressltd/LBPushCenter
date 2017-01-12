@@ -5,7 +5,7 @@
     "require": {
         "libressltd/lbsa": "*",
         "libressltd/lbform": "*",
-        "alsofronie/eloquent-uuid": "^1.0",
+        "alsofronie/eloquent-uuid": "*",
         "guzzlehttp/guzzle": "*"
     },
     "license": "MIT",
