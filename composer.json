@@ -3,9 +3,8 @@
     "description": "Push notification center",
     "type": "library",
     "require": {
-        "acacha/admin-lte-template-laravel": "*",
+        "libressltd/lbsa": "*",
         "libressltd/lbform": "*",
-        "davibennun/laravel-push-notification": "dev-laravel5",
         "guzzlehttp/guzzle": "*"
     },
     "license": "MIT",
