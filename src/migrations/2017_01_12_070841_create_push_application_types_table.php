@@ -14,13 +14,11 @@ class CreatePushApplicationTypesTable extends Migration
     public function up()
     {
         Schema::create('push_application_types', function (Blueprint $table) {
-            $table->char('id', 32);
+            $table->increments('id');
             $table->string("name");
             $table->string("description");
             $table->string("color_class");
             $table->timestamps();
-
-            $table->primary();
         });
     }
 

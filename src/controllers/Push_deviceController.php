@@ -4,6 +4,7 @@ namespace LIBRESSLtd\LBPushCenter\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Push_device;
 
 class Push_deviceController extends Controller
 {
@@ -14,7 +15,8 @@ class Push_deviceController extends Controller
      */
     public function index()
     {
-        //
+        $devices = Push_device::get();
+        return view("vendor.LBPushCenter.device.index", ["devices" => $devices]);
     }
 
     /**
@@ -46,7 +48,8 @@ class Push_deviceController extends Controller
      */
     public function show($id)
     {
-        //
+        $device = Push_device::findOrFail($id);
+        return $device->send("test123123", "test");
     }
 
     /**

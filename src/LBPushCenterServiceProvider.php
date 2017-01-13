@@ -17,7 +17,7 @@ class LBPushCenterServiceProvider extends ServiceProvider
             __DIR__.'/jobs' => base_path('app/Jobs'),
             __DIR__.'/migrations' => base_path('database/migrations'),
             __DIR__.'/models' => base_path('app/Models'),
-            __DIR__.'/views' => base_path('resources/views/vendor/LBPushCenter'),
+            __DIR__.'/views' => base_path('resources/views/vendor'),
 	    ], 'lbpushcenter');
     }
 
