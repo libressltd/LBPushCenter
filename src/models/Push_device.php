@@ -14,7 +14,7 @@ class Push_device extends Model
     static function add($token, $app_name)
     {
         $app = Push_application::where("name", $app_name)->firstOrFail();
-        $device = Push_device::where("device_token", $token)->where("app_id", $app->id)->first();
+        $device = Push_device::where("device_token", $token)->where("application_id", $app->id)->first();
         if (!$device)
         {
             $device = new Push_device;
