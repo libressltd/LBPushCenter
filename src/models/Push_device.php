@@ -26,7 +26,7 @@ class Push_device extends Model
         return $device;
     }
 
-    public funtion send($title, $desc)
+    public function send($title, $desc)
     {
         if ($this->application->type_id == 1)
         {
