@@ -22,7 +22,7 @@ active
 </div>
 
 <section id="widget-grid" class="">
-    {!! Form::open(array('url' => "lbpushcenter/device/$device->id/notification", 'method' => "put", 'files' => true)) !!}
+    {!! Form::open(array('url' => "lbpushcenter/device/$device->id/notification", 'method' => "POST", 'files' => true)) !!}
         <div class="row">
             <article class="col-lg-8 col-md-6">
                 @box_open(trans("lbpushcenter.device.notification.create.title"))
