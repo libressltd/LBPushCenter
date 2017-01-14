@@ -4,19 +4,19 @@ namespace LIBRESSLtd\LBPushCenter\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Push_application_type;
+use App\Models\Push_device;
 
-class Push_applicationTypeController extends Controller
+class Push_deviceNotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($device_id)
     {
-        $types = Push_application_type::get();
-        return view("vendor.LBPushCenter.application_type.index", ["types" => $types]);
+        $device = Push_device::findOrFail($device_id);
+        $device->send("test", "test");
     }
 
     /**
@@ -26,7 +26,7 @@ class Push_applicationTypeController extends Controller
      */
     public function create()
     {
-        return view("vendor.LBPushCenter.application_type.add");
+        //
     }
 
     /**
@@ -37,13 +37,7 @@ class Push_applicationTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $type = new Push_application_type;
-        $type->name = $request->name;
-        $type->description = $request->description;
-        $type->color_class = $request->color_class;
-        $type->save();
-
-        return redirect(url("lbpushcenter/application_type"));
+        //
     }
 
     /**
@@ -54,11 +48,8 @@ class Push_applicationTypeController extends Controller
      */
     public function show($id)
     {
-        if ($id == "init")
-        {
-            Push_application_type::init();
-            return redirect()->back();
-        }
+        $device = Push_device::findOrFail($id);
+        return $device->send("test123123", "test");
     }
 
     /**

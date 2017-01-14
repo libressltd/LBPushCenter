@@ -15,4 +15,9 @@ class Push_application extends Model
     {
     	return $this->belongsTo("App\Models\Push_application_type", "type_id");
     }
+
+    public function pem_file()
+    {
+    	return $this->belongsTo("App\Models\Media", "pem_file_id");
+    }
 }

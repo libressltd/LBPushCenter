@@ -5,6 +5,7 @@ namespace LIBRESSLtd\LBPushCenter\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Push_application;
+use App\Models\Media;
 
 class Push_applicationController extends Controller
 {
@@ -43,9 +44,15 @@ class Push_applicationController extends Controller
         $app->server_key = $request->server_key;
         $app->server_secret = $request->server_secret;
         $app->pem_password = $request->pem_password;
+
+        if ($request->has("pem_file"))
+        {
+            $app->pem_file_id = Media::saveFile($request->pem_file)->id;
+        }
+
         $app->save();
 
-        return redirect(url("lbpushcenter/application")); 
+        return redirect(url("lbpushcenter/application"));
     }
 
     /**
@@ -56,7 +63,7 @@ class Push_applicationController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -67,7 +74,8 @@ class Push_applicationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $application = Push_application::findOrFail($id);
+        return view("vendor.LBPushCenter.application.add", ["application" => $application]);
     }
 
     /**
@@ -79,7 +87,21 @@ class Push_applicationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $app = Push_application::findOrFail($id);
+        $app->name = $request->name;
+        $app->type_id = $request->type_id;
+        $app->server_key = $request->server_key;
+        $app->server_secret = $request->server_secret;
+        $app->pem_password = $request->pem_password;
+
+        if ($request->file("pem_file"))
+        {
+            $app->pem_file_id = Media::saveFile($request->file("pem_file"))->id;
+        }
+
+        $app->save();
+
+        return redirect()->back();
     }
 
     /**

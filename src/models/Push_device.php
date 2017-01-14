@@ -42,8 +42,8 @@ class Push_device extends Model
         $deviceToken = $this->device_token;
         $ctx = stream_context_create();
         // ck.pem is your certificate file
-        stream_context_set_option($ctx, 'ssl', 'local_cert', 'ck.pem');
-        stream_context_set_option($ctx, 'ssl', 'passphrase', self::$passphrase);
+        stream_context_set_option($ctx, 'ssl', 'local_cert', $this->application->pem_file->path());
+        stream_context_set_option($ctx, 'ssl', 'passphrase', $this->application->pem_password);
         // Open a connection to the APNS server
         $fp = stream_socket_client(
             'ssl://gateway.sandbox.push.apple.com:2195', $err,
@@ -78,8 +78,7 @@ class Push_device extends Model
         $client = new \GuzzleHttp\Client();
         $headers = ['Content-Type' => 'application/json', 'Authorization' => 'key='.$this->application->server_key];
         $body = ["data" => ["message" => $title], "to" => $this->device_token];
-        $request = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', $headers, $body);
-        $response = $client->request();
+        $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', ["headers" => $headers, "json" => $body]);
 
         return $response;
     }

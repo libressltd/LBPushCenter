@@ -57,6 +57,11 @@ active
                             <a href="{{ url('lbpushcenter/application_type/create') }}" class="btn btn-primary">
                                 {{ trans('general.add')}}
                             </a>
+                            @if (App\Models\Push_application_type::count() == 0)
+                            <a href="{{ url('lbpushcenter/application_type/init') }}" class="btn btn-primary">
+                                {{ trans('lbpushcenter.application_type.init.title')}}
+                            </a>
+                            @endif
                         </footer>
                     </div>
                 </div>

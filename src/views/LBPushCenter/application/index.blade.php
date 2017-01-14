@@ -47,7 +47,11 @@ active
                                         <td>{{ $application->name }}</td>
                                         <td>{{ $application->description }}</td>
                                         <td>{{ $application->type->name }}</td>
-                                        <td></td>
+                                        <td>
+                                            <a href="{{ url("lbpushcenter/application/$application->id/edit") }}" class="btn btn-xs btn-primary">
+                                                {{ trans('general.edit')}}
+                                            </a>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>

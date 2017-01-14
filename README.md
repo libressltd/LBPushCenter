@@ -6,7 +6,6 @@ composer require libressltd/lbpushcenter
 
 ### Step 2: Add service provider to config/app.php
 
-Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class,
 LIBRESSLtd\LBPushCenter\LBPushCenterServiceProvider::class,
 
 and alias
