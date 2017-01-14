@@ -54,7 +54,7 @@ active
                                             @endforeach
                                         </td>
                                         <td>
-                                            <a href="{{ url("lbpushcenter/device/$device->id/notification/create") }}" class="btn btn-primary">
+                                            <a href="{{ url("lbpushcenter/device/$device->id/notification") }}" class="btn btn-primary">
                                                 {{ trans('lbpushcenter.device.notification.title')}}
                                             </a>
                                         </td>

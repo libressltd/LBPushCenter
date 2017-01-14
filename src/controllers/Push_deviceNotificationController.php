@@ -24,9 +24,10 @@ class Push_deviceNotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($device_id)
     {
-        //
+        $device = Push_device::findOrFail($device_id)
+        return view("vendor.LBPushCenter.device_notification.add", ["device" => $device]);
     }
 
     /**
@@ -35,9 +36,11 @@ class Push_deviceNotificationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $device_id)
     {
-        //
+        $device = Push_device::findOrFail($device_id)
+        $device->send($request->title, $request->description);
+        return redirect()->back();
     }
 
     /**
