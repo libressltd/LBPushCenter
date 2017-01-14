@@ -26,7 +26,7 @@ class Push_deviceNotificationController extends Controller
      */
     public function create($device_id)
     {
-        $device = Push_device::findOrFail($device_id)
+        $device = Push_device::findOrFail($device_id);
         return view("vendor.LBPushCenter.device_notification.add", ["device" => $device]);
     }
 
