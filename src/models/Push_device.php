@@ -20,7 +20,7 @@ class Push_device extends Model
             $device = new Push_device;
         }
         $device->device_token = $token;
-        $device->app_id = $app->id;
+        $device->application_id = $app->id;
         $device->save();
 
         return $device;
