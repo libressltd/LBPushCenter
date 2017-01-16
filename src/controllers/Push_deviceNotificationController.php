@@ -39,7 +39,7 @@ class Push_deviceNotificationController extends Controller
     public function store(Request $request, $device_id)
     {
         $device = Push_device::findOrFail($device_id);
-        $device->send($request->title, $request->description);
+        $device->sendInQueue($request->title, $request->description);
         return redirect()->back();
     }
 

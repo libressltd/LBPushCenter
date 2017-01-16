@@ -6,8 +6,7 @@ use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
-use PushNotification;
+use App\Models\Push_device;
 
 class PushNotificationJob extends Job implements ShouldQueue
 {
@@ -15,7 +14,7 @@ class PushNotificationJob extends Job implements ShouldQueue
 
 
 	protected $device_token;
-	protected $device_type;
+	protected $title;
 	protected $message;
 	
 	
@@ -24,10 +23,10 @@ class PushNotificationJob extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($device_token, $device_type, $message)
+    public function __construct($device_token, $title, $message)
     {
         $this->device_token = $device_token;
-		$this->device_type = $device_type;
+		$this->title = $title;
 		$this->message = $message;
     }
 
@@ -38,6 +37,7 @@ class PushNotificationJob extends Job implements ShouldQueue
      */
     public function handle()
     {
-        PushNotification::app($this->device_type)->to($this->device_token)->send($this->message);
+        $device = Push_device::findOrFail($this->device_token);
+        $device->send($this->title, $this->message);
     }
 }

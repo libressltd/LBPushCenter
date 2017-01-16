@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Alsofronie\Uuid\Uuid32ModelTrait;
 use App\Models\Push_application;
 use GuzzleHttp\Client;
+use App\Jobs\PushNotificationJob;
 
 class Push_device extends Model
 {
@@ -24,6 +25,12 @@ class Push_device extends Model
         $device->save();
 
         return $device;
+    }
+
+    public function sendInQueue($title, $desc)
+    {
+        $job = (new PushNotificationJob($this->device_token, $title, $desc));
+        dispatch($job);
     }
 
     public function send($title, $desc)
