@@ -2,22 +2,20 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
+use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Push_device;
 
-class PushNotificationJob extends Job implements ShouldQueue
+class PushNotificationJob implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $device_token;
+    protected $title;
+    protected $message;
 
-	protected $device_token;
-	protected $title;
-	protected $message;
-	
-	
     /**
      * Create a new job instance.
      *
@@ -26,8 +24,8 @@ class PushNotificationJob extends Job implements ShouldQueue
     public function __construct($device_token, $title, $message)
     {
         $this->device_token = $device_token;
-		$this->title = $title;
-		$this->message = $message;
+        $this->title = $title;
+        $this->message = $message;
     }
 
     /**
