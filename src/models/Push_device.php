@@ -53,7 +53,17 @@ class Push_device extends Model
         $notification->send();
     }
 
+    public function number_of_unread()
+    {
+        return $this->notifications()->where("status_id", 2)->count();
+    }
+
     // relationship
+
+    public function notifications()
+    {
+        return $this->hasMany("App\Models\Push_notification", "device_id");
+    }
 
     public function application()
     {

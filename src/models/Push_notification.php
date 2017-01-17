@@ -39,8 +39,9 @@ class Push_notification extends Model
         $body['aps'] = array(
             'alert' => array(
                 'title' => $this->title,
-                'body' => $this->message,
+                'body' => $this->message
              ),
+            'badge' => $this->device->number_of_unread(),
             'sound' => 'default'
         );
         $payload = json_encode($body);
