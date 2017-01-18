@@ -39,6 +39,7 @@ active
                                 {!! Form::lbText("server_key", @$application->server_key, trans("lbpushcenter.application.server_key.title")) !!}
                                 {!! Form::lbText("server_secret", @$application->server_secret, trans("lbpushcenter.application.server_secret.title")) !!}
                                 {!! Form::lbText("pem_password", @$application->pem_password, trans("lbpushcenter.application.pem_password.title")) !!}
+                                {!! Form::lbCheckbox("production_mode", @$application->production_mode, trans("lbpushcenter.application.production_mode.title")) !!}
                                 {!! Form::label(trans("lbpushcenter.application.pem_file.title")) !!}
                                 {!! Form::file("pem_file") !!}
                             </fieldset>

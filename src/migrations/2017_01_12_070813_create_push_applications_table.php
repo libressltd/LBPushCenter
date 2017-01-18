@@ -21,6 +21,7 @@ class CreatePushApplicationsTable extends Migration
             $table->text("server_secret")->nullable();
             $table->char('pem_file_id', 32)->nullable();
             $table->text("pem_password")->nullable();
+            $table->boolean("production_mode")->default(false);
             $table->timestamps();
 
             $table->primary('id');

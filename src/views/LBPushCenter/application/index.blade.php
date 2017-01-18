@@ -38,6 +38,7 @@ active
                                         <th>{{ trans("lbpushcenter.application.name.title") }}</th>
                                         <th>{{ trans("lbpushcenter.application.description.title") }}</th>
                                         <th>{{ trans("lbpushcenter.application.type.title") }}</th>
+                                        <th>{{ trans("lbpushcenter.application.production_mode.title") }}</th>
                                         <th>{{ trans("general.action") }}</th>
                                     </tr>
                                 </thead>
@@ -47,6 +48,7 @@ active
                                         <td>{{ $application->name }}</td>
                                         <td>{{ $application->description }}</td>
                                         <td>{{ $application->type->name }}</td>
+                                        <td>{{ $application->production_mode }}</td>
                                         <td>
                                             <a href="{{ url("lbpushcenter/application/$application->id/edit") }}" class="btn btn-xs btn-primary">
                                                 {{ trans('general.edit')}}
