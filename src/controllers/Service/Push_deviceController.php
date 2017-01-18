@@ -1,12 +1,12 @@
 <?php
 
-namespace LIBRESSLtd\LBPushCenter\Controllers;
+namespace LIBRESSLtd\LBPushCenter\Controllers\Service;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Push_application;
+use App\Models\Push_device;
 
-class Push_service_device extends Controller
+class Push_deviceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -82,5 +82,13 @@ class Push_service_device extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function postClearBadge($device_id)
+    {
+        $device = Push_device::findOrFail($device_id);
+        $device->clear_badge();
+
+        return response(["code" => 200, "description" => "success", "badge" => $device->badge()], 200);
     }
 }

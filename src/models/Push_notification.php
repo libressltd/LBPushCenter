@@ -9,10 +9,9 @@ class Push_notification extends Model
 {
     use Uuid32ModelTrait;
 
-	public function device()
-	{
-		return $this->belongsTo("App\Models\Push_device", "device_id");
-	}
+    protected $fillable = ['status_id'];
+
+    // public function
 
     public function send()
     {
@@ -41,7 +40,7 @@ class Push_notification extends Model
                 'title' => $this->title,
                 'body' => $this->message
              ),
-            'badge' => $this->device->number_of_unread(),
+            'badge' => $this->device->badge(),
             'sound' => 'default'
         );
         $payload = json_encode($body);
@@ -76,5 +75,34 @@ class Push_notification extends Model
         }
         $this->save();
         return $response;
+    }
+
+    // relationship
+
+    public function device()
+    {
+        return $this->belongsTo("App\Models\Push_device", "device_id");
+    }
+
+    // scope
+
+    public function scopeNew($query)
+    {
+        return $query->where("status_id", 1);
+    }
+
+    public function scopeSent($query)
+    {
+        return $query->where("status_id", 2);
+    }
+
+    public function scopeFail($query)
+    {
+        return $query->where("status_id", 3);
+    }
+
+    public function scopeRead($query)
+    {
+        return $query->where("status_id", 4);
     }
 }

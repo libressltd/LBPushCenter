@@ -35,5 +35,6 @@ class LBPushCenterServiceProvider extends ServiceProvider
         $this->app->make('LIBRESSLtd\LBPushCenter\Controllers\Push_deviceNotificationController');
         $this->app->make('LIBRESSLtd\LBPushCenter\Controllers\Push_userDeviceController');
         $this->app->make('LIBRESSLtd\LBPushCenter\Controllers\Push_notificationController');
+        $this->app->make('LIBRESSLtd\LBPushCenter\Controllers\Service\Push_deviceController');
     }
 }

@@ -53,9 +53,14 @@ class Push_device extends Model
         $notification->send();
     }
 
-    public function number_of_unread()
+    public function badge()
     {
-        return $this->notifications()->where("status_id", 2)->count();
+        return $this->notifications()->sent()->count();
+    }
+
+    public function clear_badge()
+    {
+        $this->notifications()->sent()->update(["status_id" => 4]);
     }
 
     // relationship

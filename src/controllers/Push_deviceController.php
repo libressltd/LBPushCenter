@@ -48,8 +48,7 @@ class Push_deviceController extends Controller
      */
     public function show($id)
     {
-        $device = Push_device::findOrFail($id);
-        return $device->send("test123123", "test");
+        
     }
 
     /**

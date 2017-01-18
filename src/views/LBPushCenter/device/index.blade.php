@@ -35,9 +35,11 @@ active
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>{{ trans("lbpushcenter.device.id.title") }}</th>
                                         <th>{{ trans("lbpushcenter.device.token.title") }}</th>
                                         <th>{{ trans("lbpushcenter.device.application.title") }}</th>
                                         <th>{{ trans("lbpushcenter.device.type.title") }}</th>
+                                        <th>{{ trans("lbpushcenter.device.unread.title") }}</th>
                                         <th>{{ trans("lbpushcenter.device.users.title") }}</th>
                                         <th>{{ trans("general.action") }}</th>
                                     </tr>
@@ -45,9 +47,11 @@ active
                                 <tbody>
                                     @foreach ($devices as $device)
                                     <tr>
+                                        <td>{{ $device->id }}</td>
                                         <td>{{ $device->device_token }}</td>
                                         <td>{{ $device->application->name }}</td>
                                         <td>{{ $device->application->type->name }}</td>
+                                        <td>{{ $device->badge() }}</td>
                                         <td>
                                             @foreach ($device->users as $user)
                                                 {{ $user->name }} 

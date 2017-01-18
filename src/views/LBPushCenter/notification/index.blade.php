@@ -36,6 +36,7 @@ active
                                 <thead>
                                     <tr>
                                         <th>{{ trans("lbpushcenter.notification.id.title") }}</th>
+                                        <th>{{ trans("lbpushcenter.notification.device.title") }}</th>
                                         <th>{{ trans("lbpushcenter.notification.title.title") }}</th>
                                         <th>{{ trans("lbpushcenter.notification.message.title") }}</th>
                                         <th>{{ trans("lbpushcenter.notification.status.title") }}</th>
@@ -48,6 +49,7 @@ active
                                     @foreach ($notifications as $notification)
                                     <tr>
                                         <td>{{ $notification->id }}</td>
+                                        <td>{{ $notification->device->id }}</td>
                                         <td>{{ $notification->title }}</td>
                                         <td>{{ $notification->message }}</td>
                                         <td>{{ $notification->status_id }}</td>
