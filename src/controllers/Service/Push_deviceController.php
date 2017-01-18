@@ -86,7 +86,7 @@ class Push_deviceController extends Controller
 
     public function postClearBadge($device_id)
     {
-        $device = Push_device::findOrFail($device_id);
+        $device = Push_device::where("id", $device_id)->orWhere("device_token", $device_id)->firstOrFail();
         $device->clear_badge();
 
         return response(["code" => 200, "description" => "success", "badge" => $device->badge()], 200);
