@@ -34,13 +34,13 @@ class Push_notification extends Model
         if ($this->device->application->production_mode)
         {
             $fp = stream_socket_client(
-            'ssl://gateway.sandbox.push.apple.com:2195', $err,
+            'ssl://gateway.push.apple.com:2195', $err,
             $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
         }
         else
         {
             $fp = stream_socket_client(
-            'ssl://gateway.push.apple.com:2195', $err,
+            'ssl://gateway.sandbox.push.apple.com:2195', $err,
             $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
         }
         if (!$fp)
