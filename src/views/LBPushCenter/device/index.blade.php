@@ -68,8 +68,8 @@ active
                             </table>
                         </div>
                         <footer>
-                            <a href="{{ url('lbpushcenter/application_type/create') }}" class="btn btn-primary">
-                                {{ trans('general.add')}}
+                            <a href="{{ url("lbpushcenter/device/all/notification/create") }}" class="btn btn-primary">
+                                {{ trans('lbpushcenter.device.notification.sendtoall.title')}}
                             </a>
                         </footer>
                     </div>

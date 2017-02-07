@@ -26,8 +26,7 @@ class Push_deviceNotificationController extends Controller
      */
     public function create($device_id)
     {
-        $device = Push_device::findOrFail($device_id);
-        return view("vendor.LBPushCenter.device_notification.add", ["device" => $device]);
+        return view("vendor.LBPushCenter.device_notification.add", ["device_id" => $device]);
     }
 
     /**
@@ -38,9 +37,21 @@ class Push_deviceNotificationController extends Controller
      */
     public function store(Request $request, $device_id)
     {
-        $device = Push_device::findOrFail($device_id);
-        $device->sendInQueue($request->title, $request->description);
-        return redirect()->back();
+        if ($device_id === "all")
+        {
+            $devices = Push_device::all();
+            foreach ($devices as $device)
+            {
+                $device->sendInQueue($request->title, $request->description);
+            }
+            return redirect()->back();
+        }
+        else
+        {
+            $device = Push_device::findOrFail($device_id);
+            $device->sendInQueue($request->title, $request->description);
+            return redirect()->back();
+        }
     }
 
     /**
