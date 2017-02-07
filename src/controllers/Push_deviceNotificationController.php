@@ -26,7 +26,7 @@ class Push_deviceNotificationController extends Controller
      */
     public function create($device_id)
     {
-        return view("vendor.LBPushCenter.device_notification.add", ["device_id" => $device]);
+        return view("vendor.LBPushCenter.device_notification.add", ["device_id" => $device_id]);
     }
 
     /**
