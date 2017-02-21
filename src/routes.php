@@ -1,13 +1,18 @@
 <?php
 
+Route::group(['prefix' => 'lbpushcenter', 'namespace' => 'libressltd\lbpushcenter\controllers'], function (){
+	Route::resource("application", "Push_applicationController");
+	Route::resource("application_type", "Push_applicationTypeController");
+	Route::resource("device", "Push_deviceController");
+	Route::resource("device.notification", "Push_deviceNotificationController");
+	Route::resource("notification", "Push_notificationController");
 
-Route::resource("lbpushcenter/application", "libressltd\lbpushcenter\controllers\Push_applicationController");
-Route::resource("lbpushcenter/application_type", "libressltd\lbpushcenter\controllers\Push_applicationTypeController");
-Route::resource("lbpushcenter/device", "libressltd\lbpushcenter\controllers\Push_deviceController");
-Route::resource("lbpushcenter/device.notification", "libressltd\lbpushcenter\controllers\Push_deviceNotificationController");
-Route::resource("lbpushcenter/notification", "libressltd\lbpushcenter\controllers\Push_notificationController");
+	Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
+		Route::resource("device", "Service\Push_deviceController");
+		Route::post("device/{device_id}/clear_badge", "Service\Push_deviceController@postClearBadge");
+	});
 
-Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
-	Route::resource("lbpushcenter/device", "libressltd\lbpushcenter\controllers\Service\Push_deviceController");
-	Route::post("lbpushcenter/device/{device_id}/clear_badge", "libressltd\lbpushcenter\controllers\Service\Push_deviceController@postClearBadge");
+	Route::group(['prefix' => 'ajax', 'middleware' => ['web']], function () {
+		Route::resource("device", "Ajax\Push_deviceController");]
+	});
 });

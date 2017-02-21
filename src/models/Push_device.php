@@ -8,10 +8,14 @@ use App\Models\Push_application;
 use App\Models\Push_notification;
 use GuzzleHttp\Client;
 use App\Jobs\PushNotificationJob;
+use LIBRESSLtd\LBForm\Traits\LBDatatableTrait;
+use Form;
 
 class Push_device extends Model
 {
-    use Uuid32ModelTrait;
+    use Uuid32ModelTrait, LBDatatableTrait;
+
+    protected $appends = ["badge", "users", "notification_button"];
 
     static function add($token, $app_name)
     {
@@ -51,6 +55,26 @@ class Push_device extends Model
         $notification->save();
 
         $notification->send();
+    }
+    
+    public function getNotificationButtonAttribute()
+    {
+        return Form::lbButton("lbpushcenter/device/$device->id/notification/create", "GET", trans('lbpushcenter.device.notification.title'), ["class" => "btn btn-primary btn-xs"])->toHtml();
+    }
+
+    public function getBadgeAttribute()
+    {
+        return $this->badge();
+    }
+
+    public function getUsersAttribute()
+    {
+        $users = [];
+        foreach ($this->users as $user)
+        {
+            $users[] = $user->name;
+        }
+        return implode(", ", $users);
     }
 
     public function badge()

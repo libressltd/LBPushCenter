@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Alsofronie\Uuid\Uuid32ModelTrait;
+use LIBRESSLtd\LBForm\Traits\LBDatatableTrait;
 
 class Push_notification extends Model
 {
-    use Uuid32ModelTrait;
+    use Uuid32ModelTrait, LBDatatableTrait;
 
     protected $fillable = ['status_id'];
 

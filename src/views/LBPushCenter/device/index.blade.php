@@ -31,47 +31,23 @@ active
                 </header>
                 <div>
                     <div class="widget-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>{{ trans("lbpushcenter.device.id.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.device.token.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.device.application.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.device.type.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.device.unread.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.device.users.title") }}</th>
-                                        <th>{{ trans("general.action") }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($devices as $device)
-                                    <tr>
-                                        <td>{{ $device->id }}</td>
-                                        <td>{{ $device->device_token }}</td>
-                                        <td>{{ $device->application->name }}</td>
-                                        <td>{{ $device->application->type->name }}</td>
-                                        <td>{{ $device->badge() }}</td>
-                                        <td>
-                                            @foreach ($device->users as $user)
-                                                {{ $user->name }} 
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            <a href="{{ url("lbpushcenter/device/$device->id/notification/create") }}" class="btn btn-primary">
-                                                {{ trans('lbpushcenter.device.notification.title')}}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <footer>
+                        @include("layouts.elements.table", [
+                            'url' => '/lbpushcenter/ajax/device',
+                            'columns' => [
+                                ['data' => 'id', 'title' => trans("lbpushcenter.device.id.title")],
+                                ['data' => 'device_token', 'title' => trans("lbpushcenter.device.token.title")],
+                                ['data' => 'application.name', 'title' => trans("lbpushcenter.device.application.title")],
+                                ['data' => 'application.type.name', 'title' => trans("lbpushcenter.device.type.title")],
+                                ['data' => 'badge', 'title' => trans("lbpushcenter.device.unread.title")],
+                                ['data' => 'users', 'title' => trans("lbpushcenter.device.users.title")],
+                                ['data' => 'notification_button', 'title' => trans("lbpushcenter.device.notification.title")],
+                            ]
+                        ])
+                        <div class="widget-footer">
                             <a href="{{ url("lbpushcenter/device/all/notification/create") }}" class="btn btn-primary">
                                 {{ trans('lbpushcenter.device.notification.sendtoall.title')}}
                             </a>
-                        </footer>
+                        </div>
                     </div>
                 </div>
             </div>
