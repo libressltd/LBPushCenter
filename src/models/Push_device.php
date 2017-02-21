@@ -15,7 +15,7 @@ class Push_device extends Model
 {
     use Uuid32ModelTrait, LBDatatableTrait;
 
-    protected $appends = ["badge", "users", "notification_button"];
+    protected $appends = ["badge", "users_string", "notification_button"];
 
     static function add($token, $app_name)
     {
@@ -59,7 +59,7 @@ class Push_device extends Model
     
     public function getNotificationButtonAttribute()
     {
-        return Form::lbButton("lbpushcenter/device/$device->id/notification/create", "GET", trans('lbpushcenter.device.notification.title'), ["class" => "btn btn-primary btn-xs"])->toHtml();
+        return Form::lbButton("lbpushcenter/device/$this->id/notification/create", "GET", trans('lbpushcenter.device.notification.title'), ["class" => "btn btn-primary btn-xs"])->toHtml();
     }
 
     public function getBadgeAttribute()
@@ -67,7 +67,7 @@ class Push_device extends Model
         return $this->badge();
     }
 
-    public function getUsersAttribute()
+    public function getUsersStringAttribute()
     {
         $users = [];
         foreach ($this->users as $user)

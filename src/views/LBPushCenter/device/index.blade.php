@@ -39,7 +39,7 @@ active
                                 ['data' => 'application.name', 'title' => trans("lbpushcenter.device.application.title")],
                                 ['data' => 'application.type.name', 'title' => trans("lbpushcenter.device.type.title")],
                                 ['data' => 'badge', 'title' => trans("lbpushcenter.device.unread.title")],
-                                ['data' => 'users', 'title' => trans("lbpushcenter.device.users.title")],
+                                ['data' => 'users_string', 'title' => trans("lbpushcenter.device.users.title")],
                                 ['data' => 'notification_button', 'title' => trans("lbpushcenter.device.notification.title")],
                             ]
                         ])
