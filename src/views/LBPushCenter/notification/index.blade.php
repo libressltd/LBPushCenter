@@ -31,38 +31,17 @@ active
                 </header>
                 <div>
                     <div class="widget-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>{{ trans("lbpushcenter.notification.id.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.notification.device.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.notification.title.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.notification.message.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.notification.status.title") }}</th>
-                                        <th>{{ trans("lbpushcenter.notification.device_type.title") }}</th>
-                                        <th>{{ trans("general.created_at") }}</th>
-                                        <th>{{ trans("general.action") }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($notifications as $notification)
-                                    <tr>
-                                        <td>{{ $notification->id }}</td>
-                                        <td>{{ $notification->device->id }}</td>
-                                        <td>{{ $notification->title }}</td>
-                                        <td>{{ $notification->message }}</td>
-                                        <td>{{ $notification->status_id }}</td>
-                                        <td>{{ $notification->device->application->type->name }}</td>
-                                        <td>{{ $notification->created_at }}</td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                        @include("layouts.elements.table", [
+                            'url' => '/lbpushcenter/ajax/notification',
+                            'columns' => [
+                                ['data' => 'created_at', 'title' => trans("general.created_at")],
+                                ['data' => 'device.id', 'title' => trans("lbpushcenter.notification.device.title")],
+                                ['data' => 'title', 'title' => trans("lbpushcenter.notification.title.title")],
+                                ['data' => 'message', 'title' => trans("lbpushcenter.notification.message.title")],
+                                ['data' => 'status_id', 'title' => trans("lbpushcenter.notification.status.title")],
+                                ['data' => 'device.application.type.name', 'title' => trans("lbpushcenter.notification.device_type.title")],
+                            ]
+                        ])
                     </div>
                 </div>
             </div>

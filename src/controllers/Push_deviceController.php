@@ -15,8 +15,7 @@ class Push_deviceController extends Controller
      */
     public function index()
     {
-        $devices = Push_device::get();
-        return view("vendor.LBPushCenter.device.index", ["devices" => $devices]);
+        return view("vendor.LBPushCenter.device.index");
     }
 
     /**

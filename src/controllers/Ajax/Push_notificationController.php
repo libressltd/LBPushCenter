@@ -1,6 +1,6 @@
 <?php
 
-namespace LIBRESSLtd\LBPushCenter\Controllers;
+namespace LIBRESSLtd\LBPushCenter\Controllers\Ajax;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,7 +15,7 @@ class Push_notificationController extends Controller
      */
     public function index()
     {
-        return view('vendor.LBPushCenter.notification.index');
+        return Push_notification::with("device", "device.application.type")->orderBy("created_at", "desc")->datatable(request());
     }
 
     /**
@@ -47,7 +47,7 @@ class Push_notificationController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**

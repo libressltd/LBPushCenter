@@ -24,13 +24,9 @@ active
 <section id="widget-grid" class="">
     <div class="row">
         <article class="col-lg-12">
-            <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
-                <header>
-                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                    <h2>{{ trans("lbpushcenter.device.list.title") }} </h2>
-                </header>
+            @box_open(trans("lbpushcenter.device.list.title"))
                 <div>
-                    <div class="widget-body">
+                    <div class="widget-body no-padding">
                         @include("layouts.elements.table", [
                             'url' => '/lbpushcenter/ajax/device',
                             'columns' => [
@@ -50,7 +46,7 @@ active
                         </div>
                     </div>
                 </div>
-            </div>
+            @box_close
         </article>
     </div>
 </section>

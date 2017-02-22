@@ -15,7 +15,7 @@ class Push_deviceController extends Controller
      */
     public function index()
     {
-        return Push_device::datatable(request());
+        return Push_device::with("application", "application.type")->datatable(request());
     }
 
     /**
