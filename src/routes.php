@@ -14,6 +14,6 @@ Route::group(['prefix' => 'lbpushcenter', 'namespace' => 'libressltd\lbpushcente
 
 	Route::group(['prefix' => 'ajax', 'middleware' => ['web']], function () {
 		Route::resource("device", "Ajax\Push_deviceController");
-		Route::resource("device", "Ajax\Push_notificationController");
+		Route::resource("notification", "Ajax\Push_notificationController");
 	});
 });
