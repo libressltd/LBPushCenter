@@ -1,6 +1,6 @@
 # LBPushCenter
 
-### Step 1: Install DeepPermission
+### Step 1: Install LBPushCenter
 
 composer require libressltd/lbpushcenter
 
@@ -20,12 +20,16 @@ php artisan vendor:publish --tag=lbpushcenter --force
 
 ```php
 
-use LBPushCenter;
+// Add a new device 
 
-LBPushCenter::push(array(
-	array("type" => "appNameIOS", "token" => "a-device-token"),
-	array("type" => "appNameAndroid", "token" => "a-device-token"),
-), "Message to push")
+Push_device::add($token, $app_name);
 
+// Send message
+
+$device = Push_device::findOrFail($device_id); // not device token
+
+$device->send($title, $desc); // sync push
+
+$device->send_in_queue($title, $desc) // must run in queue
 
 ```
