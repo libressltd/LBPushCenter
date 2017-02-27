@@ -33,3 +33,15 @@ $device->send($title, $desc); // sync push
 $device->send_in_queue($title, $desc) // must run in queue
 
 ```
+
+Using link: (should be added by lbsidemenu)
+
+manage application (for example: ios-dev, ios-production, ios, etc ...): /lbpushcenter/application
+
+manage application type (ios / fcm, need added manual): /lbpushcenter/application_type
+
+manage all device: /lbpushcenter/device
+
+manage all notification: /lbpushcenter/notification
+
+
