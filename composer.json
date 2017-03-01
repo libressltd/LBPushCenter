@@ -3,11 +3,10 @@
     "description": "Push notification center",
     "type": "library",
     "require": {
-        "libressltd/lbsa": "*",
         "libressltd/lbform": "*",
         "alsofronie/eloquent-uuid": "*",
         "guzzlehttp/guzzle": "*",
-        "libressltd/lbmediacenter": "^0.2.2"
+        "libressltd/lbmediacenter": "*"
     },
     "license": "MIT",
     "authors": [
