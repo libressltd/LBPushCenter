@@ -34,6 +34,11 @@ $device->send_in_queue($title, $desc) // must run in queue
 
 ```
 
+### Migration:
+
+Remove and re-migrate the device table;
+
+
 Using link: (should be added by lbsidemenu)
 
 manage application (for example: ios-dev, ios-production, ios, etc ...): /lbpushcenter/application

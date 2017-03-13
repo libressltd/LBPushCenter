@@ -17,6 +17,7 @@ class CreatePushDevicesTable extends Migration
             $table->char('id', 32);
             $table->string("device_token");
             $table->char("application_id", 32);
+            $table->boolean("enabled")->default(1);
             $table->timestamps();
 
             $table->primary('id');
