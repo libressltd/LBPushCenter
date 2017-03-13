@@ -34,6 +34,11 @@ $device->send_in_queue($title, $desc) // must run in queue
 
 ```
 
+### Remove badge
+
+POST: <host>/lbpushcenter/api/device/<device_id>/clear_badge
+
+
 ### Migration:
 
 Remove and re-migrate the device table;

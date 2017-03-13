@@ -70,7 +70,7 @@ class Push_deviceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $device = Push_device::where("id", $device_id)->orWhere("device_token", $device_id)->firstOrFail();
+        $device = Push_device::where("id", $id)->orWhere("device_token", $id)->firstOrFail();
         $device->enabled = $request->enabled();
         $device->save();
 
