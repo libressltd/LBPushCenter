@@ -34,9 +34,18 @@ $device->send_in_queue($title, $desc) // must run in queue
 
 ```
 
-### Remove badge
+### Service:
 
+``` php
+// remove badge
 POST: <host>/lbpushcenter/api/device/<device_id>/clear_badge
+
+// disable / enable push
+PUT: <host>/lbpushcenter/api/device/<device_id>
+
+params: enabled = 0 / 1
+
+```
 
 
 ### Migration:

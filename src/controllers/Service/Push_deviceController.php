@@ -71,7 +71,7 @@ class Push_deviceController extends Controller
     public function update(Request $request, $id)
     {
         $device = Push_device::where("id", $id)->orWhere("device_token", $id)->firstOrFail();
-        $device->enabled = $request->enabled();
+        $device->enabled = $request->enabled;
         $device->save();
 
         return response(["code" => 200, "description" => "success", "device" => $device], 200);
