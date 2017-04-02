@@ -47,7 +47,11 @@ class Push_notificationController extends Controller
      */
     public function show($id)
     {
-        //
+        $notificaiton = Push_notification::whereStatusId(1)->whereId($id)->first();
+        if ($notificaiton)
+        {
+            $notificaiton->send();
+        }
     }
 
     /**
