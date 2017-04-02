@@ -73,7 +73,7 @@ class Push_notification extends Model
 
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
-        })->limit(100)->get();
+        })->whereStatusId(1)->limit(100)->get();
 
         foreach ($notifications as $notification)
         {
