@@ -37,7 +37,7 @@ class Push_notification extends Model
             'sound' => 'default'
         );
         $payload = json_encode($body);
-        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+        $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->token) . pack('n', strlen($payload)) . $payload;
         $result = fwrite($fp, $msg, strlen($msg));
         if (!$result)
         {
