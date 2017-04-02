@@ -26,6 +26,30 @@ class Push_notification extends Model
         }
     }
 
+    public function sendIOSContinuosly($fp)
+    {
+        $body['aps'] = array(
+            'alert' => array(
+                'title' => $this->title,
+                'body' => $this->message
+             ),
+            'badge' => $this->device->badge() + 1,
+            'sound' => 'default'
+        );
+        $payload = json_encode($body);
+        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+        $result = fwrite($fp, $msg, strlen($msg));
+        if (!$result)
+        {
+            $this->status_id = 3;
+        }
+        else
+        {
+            $this->status_id = 2;
+        }
+        $this->save();
+    }
+
     public function sendIOS() {
         $deviceToken = $this->device->device_token;
         $ctx = stream_context_create();
@@ -46,27 +70,17 @@ class Push_notification extends Model
         }
         if (!$fp)
             exit("Failed to connect: $err $errstr" . PHP_EOL);
-        $body['aps'] = array(
-            'alert' => array(
-                'title' => $this->title,
-                'body' => $this->message
-             ),
-            'badge' => $this->device->badge() + 1,
-            'sound' => 'default'
-        );
-        $payload = json_encode($body);
-        $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
-        $result = fwrite($fp, $msg, strlen($msg));
+
+        $notifications = Push_notification::whereHas('device', function ($query) {
+            $query->whereApplicationId($this->device->application_id);
+        })->limit(100)->get();
+
+        foreach ($notifications as $notification)
+        {
+            $notification->sendIOSContinuosly($fp);
+        }
+
         fclose($fp);
-        if (!$result)
-        {
-            $this->status_id = 3;
-        }
-        else
-        {
-            $this->status_id = 2;
-        }
-        $this->save();
     }
 
     public function sendFCM()
