@@ -26,31 +26,8 @@ class Push_notification extends Model
         }
     }
 
-    public function sendIOSContinuosly($fp)
+    public function sendIOSConnect()
     {
-        $body['aps'] = array(
-            'alert' => array(
-                'title' => $this->title,
-                'body' => $this->message
-             ),
-            'badge' => $this->device->badge() + 1,
-            'sound' => 'default'
-        );
-        $payload = json_encode($body);
-        $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->token) . pack('n', strlen($payload)) . $payload;
-        $result = fwrite($fp, $msg, strlen($msg));
-        if (!$result)
-        {
-            $this->status_id = 3;
-        }
-        else
-        {
-            $this->status_id = 2;
-        }
-        $this->save();
-    }
-
-    public function sendIOS() {
         $deviceToken = $this->device->device_token;
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $this->device->application->pem_file->path());
@@ -70,14 +47,52 @@ class Push_notification extends Model
         }
         if (!$fp)
             exit("Failed to connect: $err $errstr" . PHP_EOL);
+        return $fp;
+    }
+
+    public function sendIOSContinuosly($fp)
+    {
+        $body['aps'] = array(
+            'alert' => array(
+                'title' => $this->title,
+                'body' => $this->message
+             ),
+            'badge' => $this->device->badge() + 1,
+            'sound' => 'default'
+        );
+        $payload = json_encode($body);
+        $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->token) . pack('n', strlen($payload)) . $payload;
+        $result = false;
+        try {
+            $result = fwrite($fp, $msg, strlen($msg));
+        } 
+        catch (\Exception $e) {
+            fclose($fp);
+            echo('Error sending payload: ' . $e->getMessage());
+            $this->status_id = 3;
+            $fp = $this->sendIOSConnect();
+        }
+        if (!$result)
+        {
+            $this->status_id = 3;
+        }
+        else
+        {
+            $this->status_id = 2;
+        }
+        $this->save();
+        return $fp;
+    }
+
+    public function sendIOS() {
+        $fp = $this->sendIOSConnect();
 
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
         })->whereStatusId(1)->limit(100)->get();
-
         foreach ($notifications as $notification)
         {
-            $notification->sendIOSContinuosly($fp);
+            $fp = $notification->sendIOSContinuosly($fp);
         }
 
         fclose($fp);

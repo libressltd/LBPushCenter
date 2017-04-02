@@ -32,10 +32,10 @@ class PushNotificationJob implements ShouldQueue
      */
     public function handle()
     {
-        $notificaiton = Push_notification::whereStatusId(1)->whereId($this->notification_id)->first();
-        if ($notificaiton)
+        $notification = Push_notification::whereStatusId(1)->whereId($this->notification_id)->first();
+        if ($notification)
         {
-            $notificaiton->send();
+            $notification->send();
         }
     }
 }
