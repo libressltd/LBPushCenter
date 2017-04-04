@@ -70,6 +70,8 @@ class Push_notification extends Model
             fclose($fp);
             echo('Error sending payload: ' . $e->getMessage());
             $this->status_id = 3;
+            $this->device->enabled = 0;
+            $this->device->save();
             $fp = $this->sendIOSConnect();
         }
         if (!$result)
