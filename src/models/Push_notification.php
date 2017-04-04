@@ -65,6 +65,7 @@ class Push_notification extends Model
         $result = false;
         try {
             $result = fwrite($fp, $msg, strlen($msg));
+            echo $this->device->token." : ".$this->message;
         } 
         catch (\Exception $e) {
             fclose($fp);
