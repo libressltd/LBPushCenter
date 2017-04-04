@@ -52,6 +52,7 @@ class Push_notification extends Model
 
     public function sendIOSContinuosly($fp)
     {
+        echo "[iOS] ".$this->device->device_tokenn." : ".$this->message." ";
         $body['aps'] = array(
             'alert' => array(
                 'title' => $this->title,
@@ -65,11 +66,10 @@ class Push_notification extends Model
         $result = false;
         try {
             $result = fwrite($fp, $msg, strlen($msg));
-            echo $this->device->device_token." : ".$this->message."\n";
         } 
         catch (\Exception $e) {
             fclose($fp);
-            echo('Error sending payload: ' . $e->getMessage());
+            echo "Failed\n";
             $this->status_id = 3;
             $this->device->enabled = 0;
             $this->device->save();
@@ -82,6 +82,7 @@ class Push_notification extends Model
         else
         {
             $this->status_id = 2;
+            echo "Done\n";
         }
         $this->save();
         return $fp;
@@ -103,6 +104,7 @@ class Push_notification extends Model
 
     public function sendFCM()
     {
+        echo "[Adr] ".$this->device->device_tokenn." : ".$this->message." ";
         $client = new \GuzzleHttp\Client();
         $headers = ['Content-Type' => 'application/json', 'Authorization' => 'key='.$this->device->application->server_key];
         $body = ["data" => ["message" => $this->message], "to" => $this->device->device_token];
