@@ -61,10 +61,12 @@ class Push_notification extends Model
             'sound' => 'default'
         );
         $payload = json_encode($body);
-        $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->device_token) . pack('n', strlen($payload)) . $payload;
+        // $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->device_token) . pack('n', strlen($payload)) . $payload;
+
+        $msg = chr(0) . chr(0) . chr(32) . pack('H*', str_replace(' ', '', $device_token)) . chr(0) . chr(strlen($payload)) . $payload;
         $result = false;
         try {
-            $result = fwrite($fp, $msg, strlen($msg));
+            $result = fwrite($fp, $msg);
         } 
         catch (\Exception $e) {
             echo $e;
@@ -88,18 +90,27 @@ class Push_notification extends Model
         return $fp;
     }
 
-    public function sendIOS() {
-        $fp = $this->sendIOSConnect();
-
+    public function sendIOS()
+    {
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
-        })->whereStatusId(1)->limit(10)->get();
+        })->whereStatusId(1)->whereTitle($this->title)->whereMessage($this->message)->with("device")->limit(1000)->get();
+
+        $device_array = [];
         foreach ($notifications as $notification)
         {
-            $fp = $notification->sendIOSContinuosly($fp);
+            $device_array[] = PushNotification::Device($notification->device->device_token, $notification->device->badge() + 1);
         }
 
-        fclose($fp);
+        $message = PushNotification::Message($this->message);
+        $collection = PushNotification::app([
+            'environment' => $this->device->application->production_mode ? "production" : "development",
+            'certificate' => $this->device->application->pem_file->path(),
+            'passPhrase'  => $this->device->application->pem_password,
+            'service'     => 'apns'
+        ])
+            ->to($devices)
+            ->send($message);
     }
 
     public function sendFCM()
