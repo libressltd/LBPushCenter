@@ -45,7 +45,10 @@ class LBPushCommand extends Command
             {
                 $notification->send();
             }
-            sleep(1);
+            else
+            {
+                sleep(1);
+            }
         }
     }
 }

@@ -28,7 +28,6 @@ class Push_notification extends Model
 
     public function sendIOSConnect()
     {
-        $deviceToken = $this->device->device_token;
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $this->device->application->pem_file->path());
         stream_context_set_option($ctx, 'ssl', 'passphrase', $this->device->application->pem_password);
@@ -68,8 +67,8 @@ class Push_notification extends Model
             $result = fwrite($fp, $msg, strlen($msg));
         } 
         catch (\Exception $e) {
+            echo $e;
             fclose($fp);
-            echo "Failed\n";
             $this->status_id = 3;
             $this->device->enabled = 0;
             $this->device->save();
@@ -78,6 +77,7 @@ class Push_notification extends Model
         if (!$result)
         {
             $this->status_id = 3;
+            echo "Failed\n";
         }
         else
         {
@@ -93,7 +93,7 @@ class Push_notification extends Model
 
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
-        })->whereStatusId(1)->limit(100)->get();
+        })->whereStatusId(1)->limit(10)->get();
         foreach ($notifications as $notification)
         {
             $fp = $notification->sendIOSContinuosly($fp);
@@ -104,21 +104,39 @@ class Push_notification extends Model
 
     public function sendFCM()
     {
-        echo "[Adr] ".$this->device->device_tokenn." : ".$this->message." \n";
+        $notifications = Push_notification::whereHas('device', function ($query) {
+            $query->whereApplicationId($this->device->application_id);
+        })->whereStatusId(1)->whereTitle($this->title)->whereMessage($this->message)->with("device")->limit(1000)->get();
+        $device_tokens = [];
+        foreach ($notifications as $notification)
+        {
+            $device_tokens[] = $notification->device->device_token;
+            echo "[Adr] ".$notification->device->device_token." : ".$this->message." \n";
+        }
+
         $client = new \GuzzleHttp\Client();
         $headers = ['Content-Type' => 'application/json', 'Authorization' => 'key='.$this->device->application->server_key];
-        $body = ["data" => ["message" => $this->message], "to" => $this->device->device_token];
+        $body = ["data" => ["message" => $this->message], "registration_ids" => $device_tokens];
         $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', ["headers" => $headers, "json" => $body]);
         $object = json_decode($response->getBody());
-        if ($object->success == 1)
+        $results = $object->results;
+        foreach ($device_tokens as $index => $token)
         {
-            $this->status_id = 2;
+            $device = Push_device::whereDeviceToken($token)->first();
+            if ($device && isset($results[$index]->error))
+            {
+                echo $results[$index]->error;
+                $device->enabled = 0;
+                $device->save();
+                $notifications[$index]->status_id = 3;
+                $notifications[$index]->save();
+            }
+            else
+            {
+                $notifications[$index]->status_id = 2;
+                $notifications[$index]->save();
+            }
         }
-        else
-        {
-            $this->status_id = 3;
-        }
-        $this->save();
         return $response;
     }
 
