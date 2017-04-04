@@ -6,8 +6,7 @@
         "libressltd/lbform": "*",
         "alsofronie/eloquent-uuid": "*",
         "guzzlehttp/guzzle": "*",
-        "libressltd/lbmediacenter": "*",
-        "davibennun/laravel-push-notification": "dev-laravel5"
+        "libressltd/lbmediacenter": "*"
     },
     "license": "MIT",
     "authors": [
