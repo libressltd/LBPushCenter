@@ -61,11 +61,11 @@ class Push_notification extends Model
             'sound' => 'default'
         );
         $payload = json_encode($body);
-        $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->token) . pack('n', strlen($payload)) . $payload;
+        $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->device_token) . pack('n', strlen($payload)) . $payload;
         $result = false;
         try {
             $result = fwrite($fp, $msg, strlen($msg));
-            echo $this->device->token." : ".$this->message;
+            echo $this->device->device_token." : ".$this->message."\n";
         } 
         catch (\Exception $e) {
             fclose($fp);
