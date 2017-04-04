@@ -16,7 +16,7 @@ and alias
 
 php artisan vendor:publish --tag=lbpushcenter --force
 
-### Step 3: Using in master:
+### Step 4: Using in master:
 
 ```php
 
@@ -36,7 +36,7 @@ $device->send_in_queue($title, $desc) // must run in queue
 
 ### Service:
 
-``` php
+```php
 // remove badge
 POST: <host>/lbpushcenter/api/device/<device_id>/clear_badge
 
@@ -45,6 +45,18 @@ PUT: <host>/lbpushcenter/api/device/<device_id>
 
 params: enabled = 0 / 1
 
+```
+
+### Command to run push
+
+```php
+
+	// Add in app\Console\Kernel.php
+    protected $commands = [
+        Commands\LBPushCommand::class
+    ];
+
+    // Then run php artisan lbpushcenter:push
 ```
 
 

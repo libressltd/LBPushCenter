@@ -41,9 +41,6 @@ class Push_device extends Model
         $notification->message = $desc;
         $notification->status_id = 1;
         $notification->save();
-
-        $job = (new PushNotificationJob($notification->id));
-        dispatch($job);
     }
 
     public function send($title, $desc)

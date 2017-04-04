@@ -15,6 +15,7 @@ class LBPushCenterServiceProvider extends ServiceProvider
     {
 		$this->publishes([
             __DIR__.'/jobs' => base_path('app/Jobs'),
+            __DIR__.'/commands' => base_path('app/Console/Commands'),
             __DIR__.'/migrations' => base_path('database/migrations'),
             __DIR__.'/models' => base_path('app/Models'),
             __DIR__.'/views' => base_path('resources/views/vendor'),
