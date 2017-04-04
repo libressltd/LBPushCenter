@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 use Alsofronie\Uuid\Uuid32ModelTrait;
 use LIBRESSLtd\LBForm\Traits\LBDatatableTrait;
@@ -9,11 +7,8 @@ use LIBRESSLtd\LBForm\Traits\LBDatatableTrait;
 class Push_notification extends Model
 {
     use Uuid32ModelTrait, LBDatatableTrait;
-
     protected $fillable = ['status_id'];
-
     // public function
-
     public function send()
     {
         if ($this->device->application->type_id == 1)
@@ -25,7 +20,6 @@ class Push_notification extends Model
             $this->sendFCM();
         }
     }
-
     public function sendIOSConnect()
     {
         $ctx = stream_context_create();
@@ -48,7 +42,6 @@ class Push_notification extends Model
             exit("Failed to connect: $err $errstr" . PHP_EOL);
         return $fp;
     }
-
     public function sendIOSContinuosly($fp)
     {
         echo "[iOS] ".$this->device->device_token." : ".$this->message." ";
@@ -61,12 +54,10 @@ class Push_notification extends Model
             'sound' => 'default'
         );
         $payload = json_encode($body);
-        // $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->device_token) . pack('n', strlen($payload)) . $payload;
-
-        $msg = chr(0) . chr(0) . chr(32) . pack('H*', str_replace(' ', '', $device_token)) . chr(0) . chr(strlen($payload)) . $payload;
+        $msg = chr(0) . pack('n', 32) . pack('H*', $this->device->device_token) . pack('n', strlen($payload)) . $payload;
         $result = false;
         try {
-            $result = fwrite($fp, $msg);
+            $result = fwrite($fp, $msg, strlen($msg));
         } 
         catch (\Exception $e) {
             echo $e;
@@ -89,30 +80,17 @@ class Push_notification extends Model
         $this->save();
         return $fp;
     }
-
-    public function sendIOS()
-    {
+    public function sendIOS() {
+        $fp = $this->sendIOSConnect();
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
-        })->whereStatusId(1)->whereTitle($this->title)->whereMessage($this->message)->with("device")->limit(1000)->get();
-
-        $device_array = [];
+        })->whereStatusId(1)->limit(10)->get();
         foreach ($notifications as $notification)
         {
-            $device_array[] = PushNotification::Device($notification->device->device_token, $notification->device->badge() + 1);
+            $fp = $notification->sendIOSContinuosly($fp);
         }
-
-        $message = PushNotification::Message($this->message);
-        $collection = PushNotification::app([
-            'environment' => $this->device->application->production_mode ? "production" : "development",
-            'certificate' => $this->device->application->pem_file->path(),
-            'passPhrase'  => $this->device->application->pem_password,
-            'service'     => 'apns'
-        ])
-            ->to($devices)
-            ->send($message);
+        fclose($fp);
     }
-
     public function sendFCM()
     {
         $notifications = Push_notification::whereHas('device', function ($query) {
@@ -124,7 +102,6 @@ class Push_notification extends Model
             $device_tokens[] = $notification->device->device_token;
             echo "[Adr] ".$notification->device->device_token." : ".$this->message." \n";
         }
-
         $client = new \GuzzleHttp\Client();
         $headers = ['Content-Type' => 'application/json', 'Authorization' => 'key='.$this->device->application->server_key];
         $body = ["data" => ["message" => $this->message], "registration_ids" => $device_tokens];
@@ -150,31 +127,24 @@ class Push_notification extends Model
         }
         return $response;
     }
-
     // relationship
-
     public function device()
     {
         return $this->belongsTo("App\Models\Push_device", "device_id");
     }
-
     // scope
-
     public function scopeNew($query)
     {
         return $query->where("status_id", 1);
     }
-
     public function scopeSent($query)
     {
         return $query->where("status_id", 2);
     }
-
     public function scopeFail($query)
     {
         return $query->where("status_id", 3);
     }
-
     public function scopeRead($query)
     {
         return $query->where("status_id", 4);
