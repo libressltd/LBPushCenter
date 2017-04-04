@@ -52,7 +52,7 @@ class Push_notification extends Model
 
     public function sendIOSContinuosly($fp)
     {
-        echo "[iOS] ".$this->device->device_tokenn." : ".$this->message." ";
+        echo "[iOS] ".$this->device->device_token." : ".$this->message." ";
         $body['aps'] = array(
             'alert' => array(
                 'title' => $this->title,
@@ -104,7 +104,7 @@ class Push_notification extends Model
 
     public function sendFCM()
     {
-        echo "[Adr] ".$this->device->device_tokenn." : ".$this->message." ";
+        echo "[Adr] ".$this->device->device_tokenn." : ".$this->message." \n";
         $client = new \GuzzleHttp\Client();
         $headers = ['Content-Type' => 'application/json', 'Authorization' => 'key='.$this->device->application->server_key];
         $body = ["data" => ["message" => $this->message], "to" => $this->device->device_token];
