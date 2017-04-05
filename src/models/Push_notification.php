@@ -69,33 +69,36 @@ class Push_notification extends Model
         }
         if (!$result)
         {
-            $this->status_id = 3;
+            // $this->status_id = 3;
             echo "Failed\n";
         }
         else
         {
-            $this->status_id = 2;
+            // $this->status_id = 2;
             echo "Done\n";
         }
-        $this->save();
+        // $this->save();
         return $fp;
     }
     public function sendIOS() {
         $fp = $this->sendIOSConnect();
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
-        })->whereStatusId(1)->limit(1000)->get();
+        })->whereStatusId(1)->orderBy("id")->limit(1000)->get();
         foreach ($notifications as $notification)
         {
             $fp = $notification->sendIOSContinuosly($fp);
         }
+        Push_notification::whereHas('device', function ($query) {
+            $query->whereApplicationId($this->device->application_id);
+        })->whereStatusId(1)->orderBy("id")->limit(1000)->update(["status_id" => 2]);
         fclose($fp);
     }
     public function sendFCM()
     {
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
-        })->whereStatusId(1)->whereTitle($this->title)->whereMessage($this->message)->with("device")->limit(1000)->get();
+        })->whereStatusId(1)->whereTitle($this->title)->whereMessage($this->message)->with("device")->orderBy("id")->limit(1000)->get();
         $device_tokens = [];
         foreach ($notifications as $notification)
         {
@@ -108,23 +111,26 @@ class Push_notification extends Model
         $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', ["headers" => $headers, "json" => $body]);
         $object = json_decode($response->getBody());
         $results = $object->results;
-        foreach ($device_tokens as $index => $token)
-        {
-            $device = Push_device::whereDeviceToken($token)->first();
-            if ($device && isset($results[$index]->error))
-            {
-                echo $results[$index]->error;
-                $device->enabled = 0;
-                $device->save();
-                $notifications[$index]->status_id = 3;
-                $notifications[$index]->save();
-            }
-            else
-            {
-                $notifications[$index]->status_id = 2;
-                $notifications[$index]->save();
-            }
-        }
+
+        Push_notification::whereHas('device', function ($query) {
+            $query->whereApplicationId($this->device->application_id);
+        })->whereStatusId(1)->whereTitle($this->title)->whereMessage($this->message)->with("device")->orderBy("id")->limit(1000)->update(["status_id" => 2]);
+        // foreach ($device_tokens as $index => $token)
+        // {
+        //     $device = Push_device::whereDeviceToken($token)->first();
+        //     if ($device && isset($results[$index]->error))
+        //     {
+        //         $device->enabled = 0;
+        //         $device->save();
+        //         $notifications[$index]->status_id = 3;
+        //         $notifications[$index]->save();
+        //     }
+        //     else
+        //     {
+        //         $notifications[$index]->status_id = 2;
+        //         $notifications[$index]->save();
+        //     }
+        // }
         return $response;
     }
     // relationship

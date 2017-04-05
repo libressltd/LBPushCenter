@@ -5,6 +5,8 @@ namespace LIBRESSLtd\LBPushCenter\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Push_device;
+use App\Models\Push_notification;
+use Webpatser\Uuid\Uuid;
 
 class Push_deviceNotificationController extends Controller
 {
@@ -39,11 +41,24 @@ class Push_deviceNotificationController extends Controller
     {
         if ($device_id === "all")
         {
-            $devices = Push_device::all();
-            foreach ($devices as $device)
-            {
-                $device->sendInQueue($request->title, $request->description);
-            }
+            Push_device::whereEnabled(1)->chunk(1000, function($devices) use ($request) {
+                $push_array = [];
+
+                foreach ($devices as $device)
+                {
+                    $uuid = Uuid::generate(4);
+                    $push_array[] = [
+                        'id' => str_replace('-', '', $uuid->string),
+                        'device_id' => $device->id,
+                        'title' => $request->title,
+                        'message' => $request->description,
+                        'status_id' => 1,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ];
+                }
+                Push_notification::insert($push_array);
+            });
             return redirect()->back();
         }
         else
