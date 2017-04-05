@@ -84,7 +84,7 @@ class Push_notification extends Model
         $fp = $this->sendIOSConnect();
         $notifications = Push_notification::whereHas('device', function ($query) {
             $query->whereApplicationId($this->device->application_id);
-        })->whereStatusId(1)->limit(10)->get();
+        })->whereStatusId(1)->limit(1000)->get();
         foreach ($notifications as $notification)
         {
             $fp = $notification->sendIOSContinuosly($fp);
