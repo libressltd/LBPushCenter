@@ -18,7 +18,6 @@ class CreatePushNotificationsTable extends Migration
             $table->char('device_id', 32)->nullable();
             $table->text('title');
             $table->text('message');
-            $table->integer("status_id");
             $table->timestamps();
 
             $table->primary('id');

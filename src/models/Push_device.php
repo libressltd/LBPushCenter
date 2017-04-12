@@ -39,7 +39,6 @@ class Push_device extends Model
         $notification->device_id = $this->id;
         $notification->title = $title;
         $notification->message = $desc;
-        $notification->status_id = 1;
         $notification->save();
     }
 
@@ -50,7 +49,6 @@ class Push_device extends Model
         $notification->device_id = $this->id;
         $notification->title = $title;
         $notification->message = $desc;
-        $notification->status_id = 1;
         $notification->save();
 
         $notification->send();

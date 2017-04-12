@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePushNotifiactionSentsTable extends Migration
+class CreatePushNotificationSentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -26,11 +26,11 @@ class CreatePushNotifiactionSentsTable extends Migration
         DB::unprepared('
             CREATE TRIGGER `push_notifications_insert` AFTER INSERT ON `push_notifications`
              FOR EACH ROW BEGIN
-                INSERT INTO push_notification_sents (id, device_id, title, message, created_at, updated_at) VALUES (new.id, new.device_id, new.title, new.message, 1, new.created_at, NOW());
+                INSERT INTO push_notification_sents (id, device_id, title, message, status_id, created_at, updated_at) VALUES (new.id, new.device_id, new.title, new.message, 1, new.created_at, NOW());
             END
         ');
         DB::unprepared('
-            CREATE TRIGGER `push_notification_sent_update` BEFORE INSERT ON `push_notification_sents`
+            CREATE TRIGGER `push_notification_sent_update` BEFORE UPDATE ON `push_notification_sents`
              FOR EACH ROW BEGIN
                 IF (new.status_id <> 1) THEN
                     DELETE FROM push_notifications WHERE id = new.id;
@@ -48,6 +48,6 @@ class CreatePushNotifiactionSentsTable extends Migration
     {
         DB::unprepared('DROP TRIGGER `push_notifications_insert`');
         DB::unprepared('DROP TRIGGER `push_notification_sent_update`');
-        Schema::dropIfExists('push_notifications');
+        Schema::dropIfExists('push_notification_sents');
     }
 }

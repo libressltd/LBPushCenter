@@ -28,7 +28,13 @@ class Push_notification extends Model
     {
         $client = new Client();
         $headers = ['Content-Type' => 'application/json', 'Authorization' => 'key='.$this->device->application->server_key];
-        $body = ["data" => ["message" => $this->message], "to" => $this->device->device_token];
+        $body = [
+            "notification" => [
+                "title" => $this->title,
+                "body" => $this->message
+            ], 
+            "to" => $this->device->device_token
+        ];
         $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', ["headers" => $headers, "json" => $body]);
         $object = json_decode($response->getBody());
         if ($object->success == 1)
@@ -74,7 +80,7 @@ class Push_notification extends Model
                     'alert' => [
                         "title" => $this->title,
                         "body" => $this->message
-                    ]
+                    ],
                     'sound' => 'default',
                     'badge' => $this->badge
                 ]
@@ -94,11 +100,6 @@ class Push_notification extends Model
         }
         print_r($response->getHeader('content-type'));
         print_r($response->getBody());
-    }
-
-    public function sendFCM()
-    {
-        
     }
 
     // relationship
