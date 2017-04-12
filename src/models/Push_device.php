@@ -76,12 +76,12 @@ class Push_device extends Model
 
     public function badge()
     {
-        return $this->notifications()->sent()->count();
+        return $this->notifications()->count();
     }
 
     public function clear_badge()
     {
-        $this->notifications()->sent()->update(["status_id" => 4]);
+        $this->notifications()->update(["status_id" => 4]);
     }
 
     // relationship

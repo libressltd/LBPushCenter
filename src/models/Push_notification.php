@@ -107,21 +107,4 @@ class Push_notification extends Model
     {
         return $this->belongsTo("App\Models\Push_device", "device_id");
     }
-    // scope
-    public function scopeNew($query)
-    {
-        return $query->where("status_id", 1);
-    }
-    public function scopeSent($query)
-    {
-        return $query->where("status_id", 2);
-    }
-    public function scopeFail($query)
-    {
-        return $query->where("status_id", 3);
-    }
-    public function scopeRead($query)
-    {
-        return $query->where("status_id", 4);
-    }
 }
