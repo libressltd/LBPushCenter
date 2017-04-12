@@ -54,7 +54,7 @@ class Push_notificationController extends Controller
             $array = [];
             for ($i = 0; $i < 30; $i ++)
             {
-                $array[] = Push_notification_sent::where("created_at", "<", Carbon::now()->addSeconds( - 5 * $i))->where("created_at", ">=", Carbon::now()->addSeconds( - 5 * $i - 5))->count();
+                $array[] = Push_notification_sent::where("updated_at", "<", Carbon::now()->addSeconds( - 5 * $i))->where("updated_at", ">=", Carbon::now()->addSeconds( - 5 * $i - 5))->count();
             }
             return $array;
         }

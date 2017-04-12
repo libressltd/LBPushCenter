@@ -26,7 +26,7 @@ class CreatePushNotificationSentsTable extends Migration
         DB::unprepared('
             CREATE TRIGGER `push_notifications_insert` AFTER INSERT ON `push_notifications`
              FOR EACH ROW BEGIN
-                INSERT INTO push_notification_sents (id, device_id, title, message, status_id, created_at, updated_at) VALUES (new.id, new.device_id, new.title, new.message, 1, new.created_at, NOW());
+                INSERT INTO push_notification_sents (id, device_id, title, message, status_id, created_at) VALUES (new.id, new.device_id, new.title, new.message, 1, new.created_at);
             END
         ');
         DB::unprepared('
