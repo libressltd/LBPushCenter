@@ -40,7 +40,7 @@ class LBPushCommand extends Command
     {
         while (1)
         {
-            $notification = Push_notification::whereStatusId(1)->orderBy("created_at", "desc")->first();
+            $notification = Push_notification::first();
             if ($notification)
             {
                 $notification->send();
