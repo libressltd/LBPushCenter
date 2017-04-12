@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Push_application;
 use App\Models\Media;
 
-class Push_applicationController extends Controller
+class Push_dashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class Push_applicationController extends Controller
      */
     public function index()
     {
-        return view("vendor.LBPushCenter.application.index", ["applications" => Push_application::get()]);
+        return view("vendor.LBPushCenter.dashboard.index");
     }
 
     /**
