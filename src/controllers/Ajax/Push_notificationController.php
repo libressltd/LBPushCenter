@@ -5,6 +5,8 @@ namespace LIBRESSLtd\LBPushCenter\Controllers\Ajax;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Push_notification;
+use App\Models\Push_notification_sent;
+use Carbon\Carbon;
 
 class Push_notificationController extends Controller
 {
@@ -36,7 +38,7 @@ class Push_notificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -47,7 +49,22 @@ class Push_notificationController extends Controller
      */
     public function show($id)
     {
-        
+        if ($id == 'all')
+        {
+            $array = [];
+            for ($i = 0; $i < 30; $i ++)
+            {
+                $array[] = Push_notification_sent::where("created_at", "<", Carbon::now()->addSeconds( - 5 * $i))->where("created_at", ">=", Carbon::now()->addSeconds( - 5 * $i - 5))->count();
+            }
+            return $array;
+        }
+        if ($id == 'static')
+        {
+            $array = [
+                "notification_pending" => Push_notification::count()
+            ];
+            return $array;
+        }
     }
 
     /**
