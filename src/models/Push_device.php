@@ -34,7 +34,7 @@ class Push_device extends Model
 
     public function sendInQueue($title, $desc)
     {
-        if (!$this->enabled) return;
+        if (!$this->enabled == 1) return;
         $notification = new Push_notification;
         $notification->device_id = $this->id;
         $notification->title = $title;
@@ -44,7 +44,7 @@ class Push_device extends Model
 
     public function send($title, $desc)
     {
-        if (!$this->enabled) return;
+        if (!$this->enabled == 1) return;
         $notification = new Push_notification;
         $notification->device_id = $this->id;
         $notification->title = $title;
@@ -89,6 +89,11 @@ class Push_device extends Model
     public function notifications()
     {
         return $this->hasMany("App\Models\Push_notification", "device_id");
+    }
+
+    public function sent_notifications()
+    {
+        return $this->hasMany("App\Models\Push_notification_sent", "device_id");
     }
 
     public function application()

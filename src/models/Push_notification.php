@@ -35,7 +35,11 @@ class Push_notification extends Model
             ], 
             "to" => $this->device->device_token
         ];
-        $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', ["headers" => $headers, "json" => $body]);
+        $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', [
+            "headers" => $headers, 
+            "json" => $body,
+            'http_errors' => false
+        ]);
         $object = json_decode($response->getBody());
         if ($object->success == 1)
         {
@@ -57,16 +61,16 @@ class Push_notification extends Model
         defined('CURLPIPE_MULTIPLEX') || define('CURLPIPE_MULTIPLEX', 2);
 
         $client = new Client();
-        $device_token = $this->device->device_token;
-        $application = $this->device->application;
+        $device = $this->device;
+        $application = $device->application;
         $path;
         if ($application->production_mode)
         {
-            $path = "https://api.push.apple.com/3/device/$device_token";
+            $path = "https://api.push.apple.com/3/device/$device->device_token";
         }
         else
         {
-            $path = "https://api.development.push.apple.com/3/device/$device_token";
+            $path = "https://api.development.push.apple.com/3/device/$device->device_token";
         }
         $response = $client->request('POST', $path, [
             'curl' => [
@@ -88,7 +92,8 @@ class Push_notification extends Model
             'cert' => [
                 $application->pem_file->path(),
                 $application->pem_password
-            ]
+            ],
+            'http_errors' => false
         ]);
         if ($response->getStatusCode() == 200)
         {
@@ -96,10 +101,19 @@ class Push_notification extends Model
         }
         else
         {
+            $object = json_decode($response->getBody()->getContents());
+            if ($response->getStatusCode() == 400 &&  $object->reason == "BadDeviceToken")
+            {
+                $device->enabled = 2;
+                $device->save();
+            }
+            if ($response->getStatusCode() == 410)
+            {
+                $device->enabled = 3;
+                $device->save();
+            }
             Push_notification_sent::whereId($this->id)->update(["status_id" => 3]);
         }
-        print_r($response->getHeader('content-type'));
-        print_r($response->getBody());
     }
 
     // relationship
