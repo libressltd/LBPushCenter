@@ -44,10 +44,18 @@ class Push_notification extends Model
             "json" => $body,
             'http_errors' => false
         ]);
+
         $object = json_decode($response->getBody());
-        if ($object->success == 1)
+        if ($response->getStatusCode() == 200 && $object)
         {
-            Push_notification_sent::whereId($this->id)->update(["status_id" => 2]);
+            if ($object->success == 1)
+            {
+                Push_notification_sent::whereId($this->id)->update(["status_id" => 2]);
+            }
+            else
+            {
+                Push_notification_sent::whereId($this->id)->update(["status_id" => 3]);
+            }
         }
         else
         {
