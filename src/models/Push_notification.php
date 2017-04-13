@@ -89,7 +89,8 @@ class Push_notification extends Model
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
             ],
             'headers' => [
-                'apns-id' => preg_replace("/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/i", "$1-$2-$3-$4-$5", $this->id)
+                'apns-id' => preg_replace("/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/i", "$1-$2-$3-$4-$5", $this->id),
+                'apns-topic' => $application->server_key
             ],
             'json' => [
                 'aps' => [
@@ -98,7 +99,7 @@ class Push_notification extends Model
                         "body" => $this->message
                     ],
                     'sound' => 'default',
-                    'badge' => $this->badge
+                    'badge' => $this->badge ? $this->badge : 0
                 ]
             ],
             'cert' => [
