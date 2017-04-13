@@ -14,6 +14,10 @@ class Push_notification extends Model
 
     public function send()
     {
+        if (!$this->device)
+        {
+            Push_notification_sent::whereId($this->id)->update(["status_id" => 3]);
+        }
         if ($this->device->application->type_id == 1)
         {
             $this->sendIOS();
