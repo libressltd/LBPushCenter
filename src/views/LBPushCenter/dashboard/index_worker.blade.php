@@ -50,11 +50,6 @@
 @box_close
 
 @push('script')
-<script>
-    if (!window.angular) {
-      document.write('<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"><\/script>');
-    }
-</script>
   
 <script type="text/javascript">
 
