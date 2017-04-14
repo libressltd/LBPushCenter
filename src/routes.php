@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'lbpushcenter', 'namespace' => 'libressltd\lbpushcenter\controllers', "middleware" => "Auth"], function (){
+Route::group(['prefix' => 'lbpushcenter', 'namespace' => 'libressltd\lbpushcenter\controllers', "middleware" => "auth"], function (){
 
 	Route::group(['middleware' => ['web']], function () {
 		Route::resource("application", "Push_applicationController");
