@@ -45,7 +45,7 @@ class LBPushCommand extends Command
             while (1)
             {
                 $notifications = Push_notification::with("device", "device.application")->take(20)->get();
-                if ($notifications)
+                if ($notifications->count() > 0)
                 {
                     foreach ($notifications as $notification)
                     {
@@ -66,7 +66,7 @@ class LBPushCommand extends Command
             {
                 $worker->touch();
                 $notifications = Push_notification::where("worker_id", $worker->id)->take(20)->with("device", "device.application")->get();
-                if ($notifications)
+                if ($notifications->count() > 0)
                 {
                     foreach ($notifications as $notification)
                     {
