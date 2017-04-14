@@ -20,6 +20,8 @@ class CreatePushNotificationSentsTable extends Migration
             $table->text('message');
             $table->char('worker_id', 32)->nullable();
             $table->integer("status_id");
+            $table->integer("response_code");
+            $table->string("response_string");
             $table->timestamps();
 
             $table->primary('id');

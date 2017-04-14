@@ -110,7 +110,7 @@ class Push_notification extends Model
         ]);
         if ($response->getStatusCode() == 200)
         {
-            Push_notification_sent::whereId($this->id)->update(["status_id" => 2]);
+            Push_notification_sent::whereId($this->id)->update(["status_id" => 2, "response_code" => $response->getStatusCode(), "response_string" => $response->getBody()->getContents()]);
         }
         else
         {
@@ -125,7 +125,7 @@ class Push_notification extends Model
                 $device->enabled = 3;
                 $device->save();
             }
-            Push_notification_sent::whereId($this->id)->update(["status_id" => 3]);
+            Push_notification_sent::whereId($this->id)->update(["status_id" => 3, "response_code" => $response->getStatusCode(), "response_string" => $response->getBody()->getContents()]);
         }
     }
 
