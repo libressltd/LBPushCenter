@@ -52,20 +52,17 @@
 @push('script')
   
 <script type="text/javascript">
+	var bfapp = angular.module('LBPushcenterApp', []);
 
-    $(document).ready(function() {
-		var bfapp = angular.module('LBPushcenterApp', []);
+	bfapp.controller('LBPushcenterWorkerController', function($scope, $http) {
 
-		bfapp.controller('LBPushcenterWorkerController', function($scope, $http) {
-
-			function update() {
-			    $http.get("/lbpushcenter/ajax/worker").then(function (response) {
-			    	$scope.workers = response.data;
-			    });
-			}
-	        update();
-	        setInterval(update, 5000);
-		});
+		function update() {
+		    $http.get("/lbpushcenter/ajax/worker").then(function (response) {
+		    	$scope.workers = response.data;
+		    });
+		}
+        update();
+        setInterval(update, 5000);
 	});
 </script>
 @endpush
