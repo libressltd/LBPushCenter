@@ -56,7 +56,22 @@ params: enabled = 0 / 1
         Commands\LBPushCommand::class
     ];
 
-    // Then run php artisan lbpushcenter:push
+    // Then run 
+
+    // Mode all
+    php artisan lbpushcenter:push // --mode=all (allias)
+
+    // Mode master
+    php artisan lbpushcenter:push --mode=master
+
+    // Mode worker
+    php artisan lbpushcenter:push --mode=worker
+
+
+    // Note
+    // Run mode all for normal system (optional)
+    // Run master first
+    // Then run worker (run as many as you want)
 ```
 
 

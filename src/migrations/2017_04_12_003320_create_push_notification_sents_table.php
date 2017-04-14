@@ -18,6 +18,7 @@ class CreatePushNotificationSentsTable extends Migration
             $table->char('device_id', 32)->nullable();
             $table->text('title');
             $table->text('message');
+            $table->char('worker_id', 32)->nullable();
             $table->integer("status_id");
             $table->timestamps();
 
@@ -26,7 +27,7 @@ class CreatePushNotificationSentsTable extends Migration
         DB::unprepared('
             CREATE TRIGGER `push_notifications_insert` AFTER INSERT ON `push_notifications`
              FOR EACH ROW BEGIN
-                INSERT INTO push_notification_sents (id, device_id, title, message, status_id, created_at) VALUES (new.id, new.device_id, new.title, new.message, 1, new.created_at);
+                INSERT INTO push_notification_sents (id, device_id, title, message, worker_id, status_id, created_at) VALUES (new.id, new.device_id, new.title, new.message, new.worker_id, 1, new.created_at);
             END
         ');
         DB::unprepared('

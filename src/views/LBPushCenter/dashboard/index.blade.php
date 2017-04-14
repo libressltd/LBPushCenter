@@ -32,27 +32,29 @@ active
                     </div>
                 </div>
             @box_close
+            <div class="row">
+                <article class="col-sm-6">
+                    @box_open("Device by type")
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div id="device_type" class="chart"></div>
+                            </div>
+                        </div>
+                    @box_close
+                </article>
+                <article class="col-sm-6">
+                    @box_open("Number of notification left")
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div id="number_of_notification_left"></div>
+                            </div>
+                        </div>
+                    @box_close
+                </article>
+            </div>
         </article>
-    </div>
-
-    <div class="row">
         <article class="col-sm-4">
-            @box_open("Device by type")
-                <div>
-                    <div class="widget-body no-padding">
-                        <div id="device_type" class="chart"></div>
-                    </div>
-                </div>
-            @box_close
-        </article>
-        <article class="col-sm-4">
-            @box_open("Number of notification left")
-                <div>
-                    <div class="widget-body no-padding">
-                        <div id="number_of_notification_left"></div>
-                    </div>
-                </div>
-            @box_close
+            @include("vendor.LBPushCenter.dashboard.worker")
         </article>
     </div>
 </section>
@@ -69,6 +71,7 @@ active
 <script src="/sa/js/plugin/flot/jquery.flot.pie.min.js"></script>
 <script src="/sa/js/plugin/flot/jquery.flot.time.min.js"></script>
 <script src="/sa/js/plugin/flot/jquery.flot.tooltip.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
 <script type="text/javascript">
 
