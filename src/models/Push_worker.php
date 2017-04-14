@@ -19,12 +19,12 @@ class Push_worker extends Model
 
     public function isOffline()
     {
-    	return $this->updated_at->addMinutes(5)->isPast();
+    	return $this->updated_at->addMinutes(1)->isPast();
     }
 
     public function isInactive()
     {
-    	return $this->updated_at->addMinutes(1)->isPast();
+    	return $this->updated_at->addSeconds(30)->isPast();
     }
 
     public function getIsOfflineAttribute()

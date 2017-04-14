@@ -31,8 +31,8 @@
 						<td>@{{ worker.id.substring(0, 5) }}</td>
 						<td>@{{ worker.notifications_count }}</td>
 						<td class="text-align-center hidden-xs">
-							<span class="label label-warning" ng-if="! worker.is_inactive">Inactive</span>
-							<span class="label label-success" ng-if="worker.is_inactive">Active</span>
+							<span class="label label-warning" ng-if="worker.is_inactive">Inactive</span>
+							<span class="label label-success" ng-if="! worker.is_inactive">Active</span>
 						</td>
 					</tr>
 				</tbody>
@@ -58,9 +58,18 @@
 	});
 
 	bfapp.controller('LBPushcenterStatistic', function($scope, $http) {
-
 		function update() {
-		    $http.get("/lbpushcenter/ajax/notification/static").then(function (data) {
+		    $http.get("/lbpushcenter/ajax/notification/static").then(function (response) {
+		    	$scope.info = response.data;
+		    });
+		}
+        update();
+        setInterval(update, 5000);
+	});
+
+	bfapp.controller('LBPushcenterDeviceStatus', function($scope, $http) {
+		function update() {
+		    $http.get("/lbpushcenter/ajax/device/group_by_status").then(function (response) {
 		    	$scope.info = response.data;
 		    });
 		}

@@ -43,6 +43,17 @@ active
                     @box_close
                 </article>
                 <article class="col-sm-6">
+                    @box_open("Device by type")
+                        <div>
+                            <div class="widget-body" ng-controller="LBPushcenterDeviceStatus">
+                                <h6>Device: </h6>
+                                <p>@{{ info.disabled }} disabled</p>
+                                <p>@{{ info.activated }} active</p>
+                                <p>@{{ info.wrong_token }} bad token</p>
+                                <p>@{{ info.other_problem }} other problem</p>
+                            </div>
+                        </div>
+                    @box_close
                 </article>
             </div>
         </article>

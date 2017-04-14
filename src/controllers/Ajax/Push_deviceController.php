@@ -47,7 +47,15 @@ class Push_deviceController extends Controller
      */
     public function show($id)
     {
-        
+        if ($id == "group_by_status")
+        {
+            return [
+                "disabled" => Push_device::whereStatusId(0)->count(),
+                "activated" => Push_device::whereStatusId(1)->count(),
+                "wrong_token" => Push_device::whereStatusId(2)->count(),
+                "other_problem" => Push_device::whereStatusId(3)->count(),
+            ];
+        }
     }
 
     /**

@@ -61,11 +61,11 @@ class Push_notificationController extends Controller
         if ($id == 'static')
         {
             $array = [
-                "pending" => Push_notification_sent::whereStatusId(1)->count(),
-                "success" => Push_notification_sent::whereStatusId(2)->count(),
-                "error" => Push_notification_sent::whereStatusId(3)->count(),
-                "opened" => Push_notification_sent::whereStatusId(1)->count(),
-                "speed" => Push_notification_sent::where("updated_at", "<", Carbon::now())->where("updated_at", ">=", Carbon::now()->addSeconds( - 5))->count() / 5,
+                "pending" => Push_notification_sent::whereStatusId(1)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
+                "success" => Push_notification_sent::whereStatusId(2)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
+                "error" => Push_notification_sent::whereStatusId(3)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
+                "opened" => Push_notification_sent::whereStatusId(4)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
+                "speed" => Push_notification_sent::where("updated_at", ">=", Carbon::now()->addSeconds( - 5))->count() / 5,
             ];
             return $array;
         }
