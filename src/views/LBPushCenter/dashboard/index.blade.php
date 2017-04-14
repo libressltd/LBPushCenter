@@ -54,7 +54,7 @@ active
             </div>
         </article>
         <article class="col-sm-4">
-            @include("vendor.LBPushCenter.dashboard.worker")
+            @include("vendor.LBPushCenter.dashboard.index_worker")
         </article>
     </div>
 </section>
@@ -71,7 +71,6 @@ active
 <script src="/sa/js/plugin/flot/jquery.flot.pie.min.js"></script>
 <script src="/sa/js/plugin/flot/jquery.flot.time.min.js"></script>
 <script src="/sa/js/plugin/flot/jquery.flot.tooltip.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
 <script type="text/javascript">
 
