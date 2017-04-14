@@ -1,51 +1,39 @@
-@box_open("Number of notification left")
+@box_open("Statistic")
+    <div ng-controller="LBPushcenterStatistic">
+        <div class="widget-body">
+        	<h6>Pending notification: @{{ info.pending }}</h6>
+        	<p>Speed: @{{ info.speed }} notification / second (base on last 5 seconds)</p>
+        	<p>Speed: @{{ info.speed * 3.6 }} 1000 * notification / hours (base on last 30 seconds)</p>
+        	<p>Left: @{{ info.pending / info.speed }} seconds</p>
+
+        	<h6>Notification in 1 hours</h6>
+        	<p>@{{ info.pending }} pending</p>
+        	<p>@{{ info.success }} success</p>
+        	<p>@{{ info.error }} error</p>
+        	<p>@{{ info.opened }} opened</p>
+        </div>
+    </div>
+@box_close
+
+@box_open("Workers")
     <div>
         <div class="widget-body no-padding">
-			<table class="table table-striped table-hover table-condensed" ng-app="LBPushcenterApp">
+			<table class="table table-striped table-hover table-condensed">
 				<thead>
 					<tr>
 						<th>Worker</th>
 						<th>#pending</th>
 						<th class="text-align-center">User Activity</th>
-						<!-- <th class="text-align-center hidden-xs">Online</th>
-						<th class="text-align-center">Demographic</th> -->
 					</tr>
 				</thead>
 				<tbody ng-controller="LBPushcenterWorkerController">
-					<tr ng-repeat="worker in workers">
+					<tr ng-repeat="worker in workers" ng-cloak>
 						<td>@{{ worker.id.substring(0, 5) }}</td>
 						<td>@{{ worker.notifications_count }}</td>
-						<!-- <td class="text-align-center">
-						<div class="sparkline txt-color-blue text-align-center" data-sparkline-height="22px" data-sparkline-width="90px" data-sparkline-barwidth="2">
-							2700, 3631, 2471, 1300, 1877, 2500, 2577, 2700, 3631, 2471, 2000, 2100, 3000
-						</div></td> -->
 						<td class="text-align-center hidden-xs">
-							<span class="label bg-color-orange" ng-if="! worker.is_active">Inactive</span>
-							<span class="label bg-color-teal" ng-if="worker.is_active">Active</span>
+							<span class="label label-warning" ng-if="! worker.is_inactive">Inactive</span>
+							<span class="label label-success" ng-if="worker.is_inactive">Active</span>
 						</td>
-
-						<!-- <td class="text-align-center">
-						<div class="sparkline display-inline" data-sparkline-type='pie' data-sparkline-piecolor='["#E979BB", "#57889C"]' data-sparkline-offset="90" data-sparkline-piesize="23px">
-							17,83
-						</div>
-						<div class="btn-group display-inline pull-right text-align-left hidden-tablet">
-							<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-cog fa-lg"></i>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-xs pull-right">
-								<li>
-									<a href="javascript:void(0);"><i class="fa fa-file fa-lg fa-fw txt-color-greenLight"></i> <u>P</u>DF</a>
-								</li>
-								<li>
-									<a href="javascript:void(0);"><i class="fa fa-times fa-lg fa-fw txt-color-red"></i> <u>D</u>elete</a>
-								</li>
-								<li class="divider"></li>
-								<li class="text-align-center">
-									<a href="javascript:void(0);">Cancel</a>
-								</li>
-							</ul>
-						</div>
-						</td> -->
 					</tr>
 				</tbody>
 			</table>
@@ -68,5 +56,18 @@
         update();
         setInterval(update, 5000);
 	});
+
+	bfapp.controller('LBPushcenterStatistic', function($scope, $http) {
+
+		function update() {
+		    $http.get("/lbpushcenter/ajax/notification/static").then(function (data) {
+		    	$scope.info = response.data;
+		    });
+		}
+        update();
+        setInterval(update, 5000);
+	});
+
 </script>
+
 @endpush

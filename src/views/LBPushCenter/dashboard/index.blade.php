@@ -10,7 +10,7 @@ active
 
 @section('content')
 <div class="row">
-    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4 ">
         <h1 class="page-title txt-color-blueDark">
             <i class="fa fa-edit fa-fw "></i> 
                 {{ trans("lbpushcenter.dashboard.title") }} 
@@ -21,7 +21,7 @@ active
     </div>
 </div>
 
-<section id="widget-grid" class="">
+<section id="widget-grid" class="" ng-app="LBPushcenterApp">
 
     <div class="row">
         <article class="col-sm-8">
@@ -43,13 +43,6 @@ active
                     @box_close
                 </article>
                 <article class="col-sm-6">
-                    @box_open("Number of notification left")
-                        <div>
-                            <div class="widget-body no-padding">
-                                <div id="number_of_notification_left"></div>
-                            </div>
-                        </div>
-                    @box_close
                 </article>
             </div>
         </article>
@@ -84,16 +77,7 @@ active
             loadPushUpdating();
             setInterval(loadPushUpdating, 5000);
         }
-
-        uploadNumberNotificationLeft();
-        setInterval(uploadNumberNotificationLeft, 5000);
     });
-
-    function uploadNumberNotificationLeft() {
-        $.get("/lbpushcenter/ajax/notification/static", function (data) {
-            $('#number_of_notification_left').html(data.notification_pending + " notifications left");
-        });
-    }
 
     function loadPushUpdating()
     {
