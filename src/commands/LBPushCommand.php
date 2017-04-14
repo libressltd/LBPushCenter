@@ -94,7 +94,7 @@ class LBPushCommand extends Command
                     }
                     if ($worker->notifications_count < 100)
                     {
-                        Push_notification::whereNull("worker_id")->take(200)->update(["worker_id" => $worker->id]);
+                        Push_notification::whereNull("worker_id")->take(20)->update(["worker_id" => $worker->id]);
                     }
                 }
                 sleep(1);
