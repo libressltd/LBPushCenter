@@ -31,6 +31,12 @@ class CreatePushNotificationSentsTable extends Migration
             END
         ');
         DB::unprepared('
+            CREATE TRIGGER `push_notifications_update` AFTER UPDATE ON `push_notifications`
+             FOR EACH ROW BEGIN
+                UPDATE push_notification_sents SET worker_id = new.worker_id where id = new.id;
+            END
+        ');
+        DB::unprepared('
             CREATE TRIGGER `push_notification_sent_update` BEFORE UPDATE ON `push_notification_sents`
              FOR EACH ROW BEGIN
                 IF (new.status_id <> 1) THEN
@@ -48,6 +54,7 @@ class CreatePushNotificationSentsTable extends Migration
     public function down()
     {
         DB::unprepared('DROP TRIGGER `push_notifications_insert`');
+        DB::unprepared('DROP TRIGGER `push_notifications_update`');
         DB::unprepared('DROP TRIGGER `push_notification_sent_update`');
         Schema::dropIfExists('push_notification_sents');
     }

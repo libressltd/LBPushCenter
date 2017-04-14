@@ -51,17 +51,20 @@
 
 @push('script')
 <script type="text/javascript">
-	var bfapp = angular.module('LBPushcenterApp', []);
 
-	bfapp.controller('LBPushcenterWorkerController', function($scope, $http) {
+    $(document).ready(function() {
+		var bfapp = angular.module('LBPushcenterApp', []);
 
-		function update() {
-		    $http.get("/lbpushcenter/api/worker").then(function (response) {
-		    	$scope.workers = response.data;
-		    });
-		}
-        update();
-        setInterval(update, 5000);
+		bfapp.controller('LBPushcenterWorkerController', function($scope, $http) {
+
+			function update() {
+			    $http.get("/lbpushcenter/ajax/worker").then(function (response) {
+			    	$scope.workers = response.data;
+			    });
+			}
+	        update();
+	        setInterval(update, 5000);
+		});
 	});
 </script>
 @endpush
