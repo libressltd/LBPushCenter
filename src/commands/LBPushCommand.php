@@ -85,7 +85,7 @@ class LBPushCommand extends Command
             {
                 if (Push_notification::whereNull("worker_id")->count() > 0)
                 {
-                    $workers = Push_worker::has("notification", "<", 200)->get();
+                    $workers = Push_worker::withCount("notifications")->get();
                     foreach ($workers as $worker)
                     {
                         if ($worker->isOffline())
