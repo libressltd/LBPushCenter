@@ -83,21 +83,27 @@ class LBPushCommand extends Command
         {
             while (1)
             {
-                $workers = Push_worker::withCount("notifications")->get();
-                foreach ($workers as $worker)
+                $workers = Push_worker::has("notification", "<", 200)->get();
+                if ($workers->count() > 0)
                 {
-                    if ($worker->isOffline())
+                    foreach ($workers as $worker)
                     {
-                        $worker->clearNotification();
-                        $worker->delete();
-                        continue;
-                    }
-                    if ($worker->notifications_count < 100)
-                    {
-                        Push_notification::whereNull("worker_id")->take(20)->update(["worker_id" => $worker->id]);
+                        if ($worker->isOffline())
+                        {
+                            $worker->clearNotification();
+                            $worker->delete();
+                            continue;
+                        }
+                        if ($worker->notifications_count < 100)
+                        {
+                            Push_notification::whereNull("worker_id")->take(20)->update(["worker_id" => $worker->id]);
+                        }
                     }
                 }
-                sleep(1);
+                else
+                {
+                    sleep(1);
+                }
             }
         }
     }
