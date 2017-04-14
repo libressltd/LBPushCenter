@@ -2,8 +2,8 @@
     <div ng-controller="LBPushcenterStatistic">
         <div class="widget-body">
         	<h6>Pending notification: @{{ info.pending }}</h6>
-        	<p>Speed: @{{ info.speed }} notification / second (base on last 5 seconds)</p>
-        	<p>Speed: @{{ info.speed * 3.6 }} 1000 * notification / hours (base on last 30 seconds)</p>
+        	<p>Speed: @{{ info.speed }} n/s (base on last 5 seconds)</p>
+        	<p>Speed: @{{ info.speed * 3.6 }} kn/s (base on last 30 seconds)</p>
         	<p>Left: @{{ info.pending / info.speed }} seconds</p>
 
         	<h6>Notification in 1 hours</h6>

@@ -1,12 +1,15 @@
 <?php
 
-Route::group(['prefix' => 'lbpushcenter', 'namespace' => 'libressltd\lbpushcenter\controllers'], function (){
-	Route::resource("application", "Push_applicationController");
-	Route::resource("application_type", "Push_applicationTypeController");
-	Route::resource("device", "Push_deviceController");
-	Route::resource("device.notification", "Push_deviceNotificationController");
-	Route::resource("notification", "Push_notificationController");
-	Route::resource("dashboard", "Push_dashboardController");
+Route::group(['prefix' => 'lbpushcenter', 'namespace' => 'libressltd\lbpushcenter\controllers', "middleware" => "Auth"], function (){
+
+	Route::group(['middleware' => ['web']], function () {
+		Route::resource("application", "Push_applicationController");
+		Route::resource("application_type", "Push_applicationTypeController");
+		Route::resource("device", "Push_deviceController");
+		Route::resource("device.notification", "Push_deviceNotificationController");
+		Route::resource("notification", "Push_notificationController");
+		Route::resource("dashboard", "Push_dashboardController");
+	});
 
 	Route::group(['prefix' => 'api', 'middleware' => 'api'], function () {
 		Route::resource("device", "Service\Push_deviceController");
