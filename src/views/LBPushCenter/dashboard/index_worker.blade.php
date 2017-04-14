@@ -6,21 +6,25 @@
 					<tr>
 						<th>Worker</th>
 						<th>#pending</th>
-						<!-- <th class="text-align-center">User Activity</th>
-						<th class="text-align-center hidden-xs">Online</th>
+						<th class="text-align-center">User Activity</th>
+						<!-- <th class="text-align-center hidden-xs">Online</th>
 						<th class="text-align-center">Demographic</th> -->
 					</tr>
 				</thead>
 				<tbody ng-controller="LBPushcenterWorkerController">
 					<tr ng-repeat="worker in workers">
-						<td><a href="javascript:void(0);">@{{ worker.id }}</a></td>
+						<td>@{{ worker.id.substring(0, 5) }}</td>
 						<td>@{{ worker.notifications_count }}</td>
 						<!-- <td class="text-align-center">
 						<div class="sparkline txt-color-blue text-align-center" data-sparkline-height="22px" data-sparkline-width="90px" data-sparkline-barwidth="2">
 							2700, 3631, 2471, 1300, 1877, 2500, 2577, 2700, 3631, 2471, 2000, 2100, 3000
-						</div></td>
-						<td class="text-align-center hidden-xs">143</td>
-						<td class="text-align-center">
+						</div></td> -->
+						<td class="text-align-center hidden-xs">
+							<span class="label bg-color-orange" ng-if="! worker.is_active">Inactive</span>
+							<span class="label bg-color-teal" ng-if="worker.is_active">Active</span>
+						</td>
+
+						<!-- <td class="text-align-center">
 						<div class="sparkline display-inline" data-sparkline-type='pie' data-sparkline-piecolor='["#E979BB", "#57889C"]' data-sparkline-offset="90" data-sparkline-piesize="23px">
 							17,83
 						</div>

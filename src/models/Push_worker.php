@@ -10,6 +10,7 @@ use App\Models\Push_notification;
 class Push_worker extends Model
 {
     use Uuid32ModelTrait;
+    protected $appends = ["is_offline", "is_inactive"];
 
     public function notifications()
     {
@@ -21,9 +22,19 @@ class Push_worker extends Model
     	return $this->updated_at->addMinutes(5)->isPast();
     }
 
-    public function isActive()
+    public function isInactive()
     {
     	return $this->updated_at->addMinutes(1)->isPast();
+    }
+
+    public function getIsOfflineAttribute()
+    {
+        return $this->isOffline();
+    }
+
+    public function getIsInactiveAttribute()
+    {
+        return $this->isInactive();
     }
 
     public function clearNotification()

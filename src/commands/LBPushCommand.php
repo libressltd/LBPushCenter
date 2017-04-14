@@ -5,6 +5,7 @@ use App\Models\Push_notification;
 
 use Illuminate\Console\Command;
 use App\Models\Push_worker;
+use Carbon\Carbon;
 
 class LBPushCommand extends Command
 {
@@ -83,6 +84,8 @@ class LBPushCommand extends Command
         {
             while (1)
             {
+                Push_worker::where("updated_at", "<", Carbon::now()->addMinutes(-5))->delete();
+
                 if (Push_notification::whereNull("worker_id")->count() > 0)
                 {
                     $workers = Push_worker::withCount("notifications")->get();
@@ -90,12 +93,6 @@ class LBPushCommand extends Command
                     {
                         foreach ($workers as $worker)
                         {
-                            if ($worker->isOffline())
-                            {
-                                $worker->clearNotification();
-                                $worker->delete();
-                                continue;
-                            }
                             if ($worker->notifications_count < 100)
                             {
                                 Push_notification::whereNull("worker_id")->take(20)->update(["worker_id" => $worker->id]);
