@@ -12,7 +12,7 @@
 					</tr>
 				</thead>
 				<tbody ng-controller="LBPushcenterWorkerController">
-					<tr ng-repeat="workers as worker">
+					<tr ng-repeat="worker in workers">
 						<td><a href="javascript:void(0);">@{{ worker.id }}</a></td>
 						<td>@{{ worker.notifications_count }}</td>
 						<!-- <td class="text-align-center">
