@@ -5,6 +5,7 @@ namespace LIBRESSLtd\LBPushCenter\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Push_device;
+use DB;
 
 class Push_deviceController extends Controller
 {
@@ -86,7 +87,9 @@ class Push_deviceController extends Controller
 
     public function removeDuplicatedDevice()
     {
-        
+        DB::statement("DELETE FROM push_devices WHERE id in (select id from  (select id, count(*) as no_device from push_devices group by device_token) a where no_device > 1)");
+        return redirect()->back();
+    }
     }
 
     public function recoverOtherProblemDevice()
