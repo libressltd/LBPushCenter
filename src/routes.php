@@ -19,7 +19,7 @@ Route::group(['prefix' => 'lbpushcenter', 'namespace' => 'libressltd\lbpushcente
 	});
 });
 
-Route::group(['prefix' => 'api', 'middleware' => 'api', 'namespace' => 'libressltd\lbpushcenter\controllers\Service'], function () {
+Route::group(['prefix' => 'lbpushcenter/api', 'middleware' => 'api', 'namespace' => 'libressltd\lbpushcenter\controllers\Service'], function () {
 	Route::resource("device", "Push_deviceController");
 	Route::post("device/{device_id}/clear_badge", "Push_deviceController@postClearBadge");
 });
