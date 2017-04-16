@@ -51,7 +51,7 @@ class Push_notificationController extends Controller
                         'id' => str_replace('-', '', $uuid->string),
                         'device_id' => $device->id,
                         'title' => $request->title,
-                        'message' => $request->description,
+                        'message' => $request->message,
                         'created_at' => DB::raw("NOW()"),
                     ];
                 }
@@ -70,7 +70,7 @@ class Push_notificationController extends Controller
                         'id' => str_replace('-', '', $uuid->string),
                         'device_id' => $device->id,
                         'title' => $request->title,
-                        'message' => $request->description,
+                        'message' => $request->message,
                         'created_at' => DB::raw("NOW()"),
                     ];
                 }
