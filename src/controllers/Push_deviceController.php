@@ -83,4 +83,21 @@ class Push_deviceController extends Controller
     {
         //
     }
+
+    public function removeDuplicatedDevice()
+    {
+        
+    }
+
+    public function recoverOtherProblemDevice()
+    {
+        Push_device::whereEnabled(3)->update(['enabled' => 1]);
+        return redirect()->back();
+    }
+
+    public function removeBadTokenDevice()
+    {
+        Push_device::whereEnabled(2)->delete();
+        return redirect()->back();
+    }
 }

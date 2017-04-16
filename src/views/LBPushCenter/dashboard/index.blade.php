@@ -48,9 +48,9 @@ active
                             <div class="widget-body" ng-controller="LBPushcenterDeviceStatus">
                                 <h6>Device: </h6>
                                 <p>@{{ info.disabled }} disabled</p>
-                                <p>@{{ info.activated }} active</p>
-                                <p>@{{ info.wrong_token }} bad token</p>
-                                <p>@{{ info.other_problem }} other problem</p>
+                                <p>@{{ info.activated }} active <a href="/lbpushcenter/device/removeDuplicatedDevice">Remove duplicated</a></p>
+                                <p>@{{ info.wrong_token }} bad token <a href="/lbpushcenter/device/removeBadTokenDevice">Remove</a></p>
+                                <p>@{{ info.other_problem }} other problem <a href="/lbpushcenter/device/recoverOtherProblemDevice">Recover</a></p>
                             </div>
                         </div>
                     @box_close

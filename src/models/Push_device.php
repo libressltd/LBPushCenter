@@ -106,6 +106,10 @@ class Push_device extends Model
         return $this->belongsToMany("App\Models\User", "push_user_devices", "device_id", "user_id");
     }
 
+    public function duplicated_devices()
+    {
+        return $this->hasMany("App\Models\Push_device", "device_token", "device_token");
+    }
 
     // Event
 
