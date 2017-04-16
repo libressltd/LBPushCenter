@@ -38,7 +38,7 @@ class Push_deviceController extends Controller
      */
     public function store(Request $request)
     {
-        $application = Push_application::findOrFail($request->application);
+        $application = Push_application::whereName($request->application)->firstOrFail();
         $device = new Push_device();
         $device->device_token = $request->token;
         $device->application_id = $application->id;
