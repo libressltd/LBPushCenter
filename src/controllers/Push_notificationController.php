@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Push_notification;
 use App\Models\Push_device;
+use Webpatser\Uuid\Uuid;
 use DB;
 
 class Push_notificationController extends Controller
