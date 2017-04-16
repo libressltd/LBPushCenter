@@ -40,12 +40,14 @@ class LBPushCommand extends Command
      */
     public function handle()
     {
+        $per_time = 200;
+        $max_group = 1000;
         $mode = $this->option('mode');
         if ($mode === "all")
         {
             while (1)
             {
-                $notifications = Push_notification::with("device", "device.application")->take(20)->get();
+                $notifications = Push_notification::with("device", "device.application")->take($per_time)->get();
                 if ($notifications->count() > 0)
                 {
                     foreach ($notifications as $notification)
@@ -66,7 +68,7 @@ class LBPushCommand extends Command
             while (1)
             {
                 $worker->touch();
-                $notifications = Push_notification::where("worker_id", $worker->id)->take(20)->with("device", "device.application")->get();
+                $notifications = Push_notification::where("worker_id", $worker->id)->take($per_time)->with("device", "device.application")->get();
                 if ($notifications->count() > 0)
                 {
                     foreach ($notifications as $notification)
@@ -84,7 +86,7 @@ class LBPushCommand extends Command
         {
             while (1)
             {
-                Push_worker::where("updated_at", "<", Carbon::now()->addMinutes(-5))->delete();
+                Push_worker::where("updated_at", "<", Carbon::now()->addMinutes(-1))->delete();
 
                 if (Push_notification::whereNull("worker_id")->count() > 0)
                 {
@@ -93,9 +95,9 @@ class LBPushCommand extends Command
                     {
                         foreach ($workers as $worker)
                         {
-                            if ($worker->notifications_count < 100)
+                            if ($worker->notifications_count < $max_group)
                             {
-                                Push_notification::whereNull("worker_id")->take(20)->update(["worker_id" => $worker->id]);
+                                Push_notification::whereNull("worker_id")->take($per_time)->update(["worker_id" => $worker->id]);
                             }
                         }
                     }
