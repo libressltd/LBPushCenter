@@ -65,57 +65,46 @@ class Push_notification extends Model
 
     public function sendIOS()
     {
-        defined('CURL_VERSION_HTTP2') || define('CURL_VERSION_HTTP2', 65536);
-        defined('CURL_HTTP_VERSION_2_0') || define('CURL_HTTP_VERSION_2_0', 3);
-        defined('CURL_HTTP_VERSION_2') || define('CURL_HTTP_VERSION_2', CURL_HTTP_VERSION_2_0);
-        defined('CURLPIPE_NOTHING') || define('CURLPIPE_NOTHING', 0);
-        defined('CURLPIPE_HTTP1') || define('CURLPIPE_HTTP1', 1);
-        defined('CURLPIPE_MULTIPLEX') || define('CURLPIPE_MULTIPLEX', 2);
-
-        $client = new Client();
-        $device = $this->device;
-        $application = $device->application;
-        $path;
-        if ($application->production_mode)
-        {
-            $path = "https://api.push.apple.com/3/device/$device->device_token";
+        if (!defined('CURL_HTTP_VERSION_2_0')) {
+            define('CURL_HTTP_VERSION_2_0', 3);
         }
-        else
-        {
-            $path = "https://api.development.push.apple.com/3/device/$device->device_token";
-        }
-        $response = $client->request('POST', $path, [
-            'curl' => [
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
-            ],
-            'headers' => [
-                'apns-id' => preg_replace("/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/i", "$1-$2-$3-$4-$5", $this->id),
-                'apns-topic' => $application->server_key
-            ],
-            'json' => [
-                'aps' => [
-                    'alert' => [
-                        "title" => $this->title,
-                        "body" => $this->message
-                    ],
-                    'sound' => 'default',
-                    'badge' => $this->badge ? $this->badge : 0
-                ]
-            ],
-            'cert' => [
-                $application->pem_file->path(),
-                $application->pem_password
-            ],
-            'http_errors' => false
+        // open connection 
+        $http2ch = curl_init();
+        curl_setopt($http2ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+         
+        // send push
+        $apple_cert = $this->device->application->pem_file->path();
+        $message = json_encode([
+            "aps" => [
+                "alert" => [
+                    "title" => $this->title,
+                    "title" => $this->message,
+                ],
+                "sound" => "default",
+                "badge" => 1
+            ]
         ]);
-        if ($response->getStatusCode() == 200)
+        $token = $this->device->device_token;
+        $http2_server = 'https://api.development.push.apple.com'; // or 'api.push.apple.com' if production
+        $app_bundle_id = $this->device->application->server_key;
+         
+        $status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token);
+
+        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($response, 0, $header_size);
+        $body = substr($response, $header_size);
+         
+        // close connection
+        curl_close($http2ch);
+
+        if ($status == 200)
         {
-            Push_notification_sent::whereId($this->id)->update(["status_id" => 2, "response_code" => $response->getStatusCode(), "response_string" => $response->getBody()->getContents()]);
+            Push_notification_sent::whereId($this->id)->update(["status_id" => 2, "response_code" => $status, "response_string" => $body]);
         }
         else
         {
-            $object = json_decode($response->getBody()->getContents());
-            if ($response->getStatusCode() == 400 &&  $object->reason == "BadDeviceToken")
+            $object = json_decode($body);
+            if ($status == 400 &&  $object->reason == "BadDeviceToken")
             {
                 $device->enabled = 2;
                 $device->save();
@@ -125,8 +114,48 @@ class Push_notification extends Model
                 $device->enabled = 3;
                 $device->save();
             }
-            Push_notification_sent::whereId($this->id)->update(["status_id" => 3, "response_code" => $response->getStatusCode(), "response_string" => $response->getBody()->getContents()]);
+            Push_notification_sent::whereId($this->id)->update(["status_id" => 3, "response_code" => $status, "response_string" => $body]);
         }
+    }
+
+    function sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token)
+    {
+        // url (endpoint)
+        $url = "{$http2_server}/3/device/{$token}";
+     
+        // certificate
+        $cert = realpath($apple_cert);
+     
+        // headers
+        $headers = array(
+            "apns-topic: {$app_bundle_id}",
+            "User-Agent: My Sender"
+        );
+     
+        // other curl options
+        curl_setopt_array($http2ch, array(
+            CURLOPT_URL => $url,
+            CURLOPT_PORT => 443,
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_POST => TRUE,
+            CURLOPT_POSTFIELDS => $message,
+            CURLOPT_RETURNTRANSFER => TRUE,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSLCERT => $cert,
+            CURLOPT_HEADER => 1
+        ));
+     
+        // go...
+        $result = curl_exec($http2ch);
+        if ($result === FALSE) {
+          throw new Exception("Curl failed: " .  curl_error($http2ch));
+        }
+     
+        // get response
+        $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
+     
+        return $status;
     }
 
     // relationship

@@ -19,14 +19,7 @@ class Push_worker extends Model
 
     public function findSame($notification)
     {
-        if ($notification->device->application->type_id == 1)
-        {
-            // ios
-        }
-        else
-        {
-            
-        }
+        
     }
 
     public function notifications()
