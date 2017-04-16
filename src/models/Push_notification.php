@@ -88,7 +88,7 @@ class Push_notification extends Model
         $http2_server = 'https://api.development.push.apple.com'; // or 'api.push.apple.com' if production
         $app_bundle_id = $this->device->application->server_key;
          
-        $status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token);
+        $status = $this->sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token);
 
         $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($response, 0, $header_size);
