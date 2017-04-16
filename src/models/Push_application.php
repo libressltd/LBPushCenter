@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Alsofronie\Uuid\Uuid32ModelTrait;
+use LIBRESSLtd\LBForm\Traits\LBDatatableTrait;
 
 class Push_application extends Model
 {
-    use Uuid32ModelTrait;
+    use Uuid32ModelTrait, LBDatatableTrait;
 
     // relationship
 
