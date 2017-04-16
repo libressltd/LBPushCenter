@@ -5,6 +5,7 @@ namespace LIBRESSLtd\LBPushCenter\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Push_notification;
+use DB;
 
 class Push_notificationController extends Controller
 {
@@ -36,7 +37,45 @@ class Push_notificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->application_id == -1)
+        {
+            Push_device::whereEnabled(1)->chunk(1000, function($devices) use ($request) {
+                $push_array = [];
+
+                foreach ($devices as $device)
+                {
+                    $uuid = Uuid::generate(4);
+                    $push_array[] = [
+                        'id' => str_replace('-', '', $uuid->string),
+                        'device_id' => $device->id,
+                        'title' => $request->title,
+                        'message' => $request->description,
+                        'created_at' => DB::raw("NOW()"),
+                    ];
+                }
+                Push_notification::insert($push_array);
+            });
+        }
+        else
+        {
+            Push_device::whereApplicationId($request->application_id)->whereEnabled(1)->chunk(1000, function($devices) use ($request) {
+                $push_array = [];
+
+                foreach ($devices as $device)
+                {
+                    $uuid = Uuid::generate(4);
+                    $push_array[] = [
+                        'id' => str_replace('-', '', $uuid->string),
+                        'device_id' => $device->id,
+                        'title' => $request->title,
+                        'message' => $request->description,
+                        'created_at' => DB::raw("NOW()"),
+                    ];
+                }
+                Push_notification::insert($push_array);
+            });
+        }
+        return redirect()->back();
     }
 
     /**

@@ -68,13 +68,9 @@ class LBPushCommand extends Command
             while (1)
             {
                 $worker->touch();
-                $notifications = Push_notification::where("worker_id", $worker->id)->take($per_time)->with("device", "device.application")->get();
-                if ($notifications->count() > 0)
+                if ($worker->notifications()->whereStatusId(1)->count() > 0)
                 {
-                    foreach ($notifications as $notification)
-                    {
-                        $notification->send();
-                    }
+                    $worker->start_work();
                 }
                 else
                 {

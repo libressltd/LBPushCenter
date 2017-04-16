@@ -15,6 +15,21 @@
     </div>
 @box_close
 
+@box_open("Quick test")
+    <div ng-controller="LBPushcenterStatistic">
+        <div class="widget-body">
+        	{!! Form::open(["url" => "/lbpushcenter/notification", "method" => "post"]) !!}
+        	{!! Form::lbSelect("application_id", "", App\Models\Push_application::toOption("name", "id"), "Application") !!}
+        	{!! Form::lbText("title", "", "Title") !!}
+        	{!! Form::lbText("message", "", "Message") !!}
+        	<div class="widget-footer">
+	        	{!! Form::lbSubmit() !!}
+        	</div>
+        	{!! Form::close() !!}
+        </div>
+    </div>
+@box_close
+
 @box_open("Workers")
     <div>
         <div class="widget-body no-padding">

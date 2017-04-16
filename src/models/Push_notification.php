@@ -35,7 +35,7 @@ class Push_notification extends Model
         $body = [
             "notification" => [
                 "title" => $this->title,
-                "body" => $this->message
+                "body" => $this->message,
             ], 
             "to" => $this->device->device_token
         ];
@@ -78,7 +78,7 @@ class Push_notification extends Model
             "aps" => [
                 "alert" => [
                     "title" => $this->title,
-                    "title" => $this->message,
+                    "body" => $this->message,
                 ],
                 "sound" => "default",
                 "badge" => 1
@@ -156,6 +156,18 @@ class Push_notification extends Model
         $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
      
         return $status;
+    }
+
+    public function payload($application)
+    {
+        if ($application->type_id == 1)
+        {
+            // ios
+        }
+        else
+        {
+            // android
+        }
     }
 
     // relationship
