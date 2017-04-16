@@ -105,4 +105,21 @@ class Push_device extends Model
     {
         return $this->belongsToMany("App\Models\User", "push_user_devices", "device_id", "user_id");
     }
+
+
+    // Event
+
+    public static function boot()
+    {
+        Push_device::bootUuid32ModelTrait();
+        Push_device::creating(function ($device) {
+            $duplicated_device = Push_device::whereDeviceToken($device->device_token)->first();
+            if ($duplicated_device)
+            {
+                $duplicated_device->touch();
+                return false;
+            }
+            return true;
+        });
+    }
 }

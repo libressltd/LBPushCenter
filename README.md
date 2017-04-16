@@ -37,6 +37,10 @@ $device->send_in_queue($title, $desc) // must run in queue
 ### Service:
 
 ```php
+// register device badge
+POST: <host>/lbpushcenter/api/device
+params: token, application
+
 // remove badge
 POST: <host>/lbpushcenter/api/device/<device_id>/clear_badge
 

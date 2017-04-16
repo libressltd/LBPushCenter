@@ -12,6 +12,23 @@ class Push_worker extends Model
     use Uuid32ModelTrait;
     protected $appends = ["is_offline", "is_inactive"];
 
+    public function start_work()
+    {
+        $notification = $this->notifications()->first();
+    }
+
+    public function findSame($notification)
+    {
+        if ($notification->device->application->type_id == 1)
+        {
+            // ios
+        }
+        else
+        {
+            
+        }
+    }
+
     public function notifications()
     {
         return $this->hasMany("App\Models\Push_notification", "worker_id");
