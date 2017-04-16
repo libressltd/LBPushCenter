@@ -54,8 +54,7 @@ class Push_deviceController extends Controller
                 "disabled" => Push_device::whereEnabled(0)->count(),
                 "activated" => Push_device::whereEnabled(1)->count(),
                 "wrong_token" => Push_device::whereEnabled(2)->count(),
-                "other_problem" => Push_device::whereEnabled(3)->count(),
-                "duplicated" => Push_device::has("duplicated_device", ">", 1)->count()
+                "other_problem" => Push_device::whereEnabled(3)->count()
             ];
         }
     }

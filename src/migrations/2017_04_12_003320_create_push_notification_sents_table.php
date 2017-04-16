@@ -46,6 +46,12 @@ class CreatePushNotificationSentsTable extends Migration
                 END IF;
             END
         ');
+        DB::unprepared('
+            CREATE TRIGGER `push_device_update` AFTER UPDATE ON `push_devices`
+             FOR EACH ROW BEGIN
+                DELETE FROM push_devices where device_token = new.device_token and id <> new.id;
+            END
+        ');
     }
 
     /**
@@ -58,6 +64,7 @@ class CreatePushNotificationSentsTable extends Migration
         DB::unprepared('DROP TRIGGER `push_notifications_insert`');
         DB::unprepared('DROP TRIGGER `push_notifications_update`');
         DB::unprepared('DROP TRIGGER `push_notification_sent_update`');
+        DB::unprepared('DROP TRIGGER `push_device_update`');
         Schema::dropIfExists('push_notification_sents');
     }
 }
