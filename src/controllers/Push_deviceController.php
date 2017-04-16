@@ -90,7 +90,6 @@ class Push_deviceController extends Controller
         DB::statement("DELETE FROM push_devices WHERE id in (select id from  (select id, count(*) as no_device from push_devices group by device_token) a where no_device > 1)");
         return redirect()->back();
     }
-    }
 
     public function recoverOtherProblemDevice()
     {

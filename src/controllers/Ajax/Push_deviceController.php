@@ -55,7 +55,7 @@ class Push_deviceController extends Controller
                 "activated" => Push_device::whereEnabled(1)->count(),
                 "wrong_token" => Push_device::whereEnabled(2)->count(),
                 "other_problem" => Push_device::whereEnabled(3)->count(),
-                // "duplicated" => DB::raw("select id from  (select id, count(*) as no_device from push_devices group by device_token) a where no_device > 1")->count()
+                "duplicated" => DB::select("select count(*) as count from (select id from  (select id, count(*) as no_device from push_devices group by device_token) a where no_device > 1) b")
             ];
         }
     }
