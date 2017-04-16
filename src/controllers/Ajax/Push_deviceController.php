@@ -5,6 +5,7 @@ namespace LIBRESSLtd\LBPushCenter\Controllers\Ajax;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Push_device;
+use DB;
 
 class Push_deviceController extends Controller
 {
