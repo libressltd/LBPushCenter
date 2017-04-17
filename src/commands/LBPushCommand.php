@@ -68,7 +68,7 @@ class LBPushCommand extends Command
             while (1)
             {
                 $worker->touch();
-                if ($worker->notifications()->whereStatusId(1)->count() > 0)
+                if ($worker->notifications()->count() > 0)
                 {
                     $worker->start_work();
                 }

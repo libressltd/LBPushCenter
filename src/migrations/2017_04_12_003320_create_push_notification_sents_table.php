@@ -25,6 +25,11 @@ class CreatePushNotificationSentsTable extends Migration
             $table->timestamps();
 
             $table->primary('id');
+            $table->index('worker_id');
+            $table->foreign('worker_id')
+                  ->references('id')->on('push_workers')
+                  ->onUpdate('cascade')
+                  ->onDelete('set null');
         });
         DB::unprepared('
             CREATE TRIGGER `push_notifications_insert` AFTER INSERT ON `push_notifications`
@@ -43,6 +48,9 @@ class CreatePushNotificationSentsTable extends Migration
              FOR EACH ROW BEGIN
                 IF (new.status_id <> 1) THEN
                     DELETE FROM push_notifications WHERE id = new.id;
+                    IF (new.response_code == 400) THEN
+                        UPDATE push_devices set enabled = 2 where id = new.device_id;
+                    END IF;
                 END IF;
             END
         ');
