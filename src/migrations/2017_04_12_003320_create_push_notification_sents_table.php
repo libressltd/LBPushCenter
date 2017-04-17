@@ -48,7 +48,7 @@ class CreatePushNotificationSentsTable extends Migration
              FOR EACH ROW BEGIN
                 IF (new.status_id <> 1) THEN
                     DELETE FROM push_notifications WHERE id = new.id;
-                    IF (new.response_code == 400) THEN
+                    IF (new.response_code = 400) THEN
                         UPDATE push_devices set enabled = 2 where id = new.device_id;
                     END IF;
                 END IF;
