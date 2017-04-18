@@ -20,7 +20,7 @@ class CreatePushWorkersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('push_notification_sents', function (Blueprint $table) {
+        Schema::table('push_notifications', function (Blueprint $table) {
             $table->index('worker_id');
             $table->foreign('worker_id')
                   ->references('id')->on('push_workers')
@@ -36,8 +36,9 @@ class CreatePushWorkersTable extends Migration
      */
     public function down()
     {
-        Schema::table('push_notification_sents', function (Blueprint $table) {
-            $table->dropForeign('worker_id');
+        Schema::table('push_notifications', function (Blueprint $table) {
+            $table->dropForeign('push_notifications_worker_id_foreign');
+            $table->dropIndex('worker_id');
         });
 
         Schema::dropIfExists('push_workers');
