@@ -124,8 +124,6 @@ class Push_worker extends Model
             $body = substr($result, $header_size);
             $object = json_decode($body);
 
-            echo "$result - $status - $body\n";
-
             if ($status == 200)
             {
                 $success_array = $result_array["success"];

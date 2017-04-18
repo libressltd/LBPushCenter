@@ -25,12 +25,8 @@ class CreatePushNotificationSentsTable extends Migration
             $table->timestamps();
 
             $table->primary('id');
-            $table->index('worker_id');
-            $table->foreign('worker_id')
-                  ->references('id')->on('push_workers')
-                  ->onUpdate('cascade')
-                  ->onDelete('set null');
         });
+        
         DB::unprepared('
             CREATE TRIGGER `push_notifications_insert` AFTER INSERT ON `push_notifications`
              FOR EACH ROW BEGIN
