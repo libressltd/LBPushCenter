@@ -200,7 +200,7 @@ class Push_worker extends Model
 
         $object = json_decode($response->getBody());
 
-        $result_array = ["success" => [], "InvalidRegistration" => [], "NotRegistered" => [], "InvalidPackageName" => []];
+        $result_array = ["success" => [], "InvalidRegistration" => [], "NotRegistered" => [], "InvalidPackageName" => [], "OtherProblem" => []];
         for ($i = 0; $i < count($object->results); $i ++)
         {
             $result = $object->results[$i];
@@ -233,6 +233,12 @@ class Push_worker extends Model
                     $success_array[] = $device_id;
                     $result_array["InvalidPackageName"] = $success_array;
                 }
+                else
+                {
+                    $success_array = $result_array["OtherProblem"];
+                    $success_array[] = $device_id;
+                    $result_array["OtherProblem"] = $success_array;
+                }
             }
         }
         if (count($result_array["success"]) > 0)
@@ -250,6 +256,10 @@ class Push_worker extends Model
         if (count($result_array["InvalidPackageName"]) > 0)
         {
             Push_notification_sent::whereIn("id", $result_array["InvalidPackageName"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "InvalidPackageName",  "updated_at" => DB::raw("NOW()")]);
+        }
+        if (count($result_array["OtherProblem"]) > 0)
+        {
+            Push_notification_sent::whereIn("id", $result_array["OtherProblem"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "OtherProblem",  "updated_at" => DB::raw("NOW()")]);
         }
     }
 
