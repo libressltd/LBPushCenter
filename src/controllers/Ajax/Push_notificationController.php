@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Push_notification;
 use App\Models\Push_notification_sent;
 use Carbon\Carbon;
+use DB;
 
 class Push_notificationController extends Controller
 {
@@ -54,17 +55,20 @@ class Push_notificationController extends Controller
             $array = [];
             for ($i = 0; $i < 30; $i ++)
             {
-                $array[] = Push_notification_sent::where("updated_at", "<", Carbon::now()->addSeconds( - 5 * $i))->where("updated_at", ">=", Carbon::now()->addSeconds( - 5 * $i - 5))->count();
+                $array[] = Push_notification_sent::
+                    where("updated_at", "<", DB::raw("(NOW() - INTERVAL " + (5 * $i) + " SECOND)"))
+                    ->where("updated_at", ">=", DB::raw("(NOW() - INTERVAL " + (5 * $i + 5) + " SECOND)"))
+                    ->count();
             }
             return $array;
         }
         if ($id == 'static')
         {
             $array = [
-                "pending" => Push_notification_sent::whereStatusId(1)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
-                "success" => Push_notification_sent::whereStatusId(2)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
-                "error" => Push_notification_sent::whereStatusId(3)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
-                "opened" => Push_notification_sent::whereStatusId(4)->where("updated_at", ">=", Carbon::now()->addHours(- 1))->count(),
+                "pending" => Push_notification_sent::whereStatusId(1)->where("updated_at", ">=", DB::raw("(NOW() - INTERVAL 1 DAY)"))->count(),
+                "success" => Push_notification_sent::whereStatusId(2)->where("updated_at", ">=", DB::raw("(NOW() - INTERVAL 1 DAY)"))->count(),
+                "error" => Push_notification_sent::whereStatusId(3)->where("updated_at", ">=", DB::raw("(NOW() - INTERVAL 1 DAY)"))->count(),
+                "opened" => Push_notification_sent::whereStatusId(4)->where("updated_at", ">=", DB::raw("(NOW() - INTERVAL 1 DAY)"))->count(),
                 "speed" => Push_notification_sent::where("updated_at", ">=", Carbon::now()->addSeconds( - 5))->count() / 5,
             ];
             return $array;

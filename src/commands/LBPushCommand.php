@@ -82,7 +82,7 @@ class LBPushCommand extends Command
         {
             while (1)
             {
-                Push_worker::where("updated_at", "<", Carbon::now()->addMinutes(-1))->delete();
+                Push_worker::where("updated_at", "<", Carbon::now()->addMinutes(-5))->delete();
 
                 if (Push_notification::whereNull("worker_id")->count() > 0)
                 {
