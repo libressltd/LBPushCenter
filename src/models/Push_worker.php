@@ -129,19 +129,19 @@ class Push_worker extends Model
             if ($status == 200)
             {
                 $success_array = $result_array["success"];
-                $success_array[] = $n->device_id;
+                $success_array[] = $n->id;
                 $result_array["success"] = $success_array;
             }
             else if ($status == 400 &&  $object->reason == "BadDeviceToken")
             {
                 $success_array = $result_array["BadDeviceToken"];
-                $success_array[] = $n->device_id;
+                $success_array[] = $n->id;
                 $result_array["BadDeviceToken"] = $success_array;
             }
             else
             {
                 $success_array = $result_array["OtherProblem"];
-                $success_array[] = $n->device_id;
+                $success_array[] = $n->id;
                 $result_array["OtherProblem"] = $success_array;
             }
         }
@@ -150,15 +150,15 @@ class Push_worker extends Model
 
         if (count($result_array["success"]) > 0)
         {
-            Push_notification_sent::whereIn("device_id", $result_array["success"])->update(["status_id" => 2, "updated_at" => DB::raw("NOW()")]);
+            Push_notification_sent::whereIn("id", $result_array["success"])->update(["status_id" => 2, "updated_at" => DB::raw("NOW()")]);
         }
         if (count($result_array["BadDeviceToken"]) > 0)
         {
-            Push_notification_sent::whereIn("device_id", $result_array["BadDeviceToken"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "BadDeviceToken",  "updated_at" => DB::raw("NOW()")]);
+            Push_notification_sent::whereIn("id", $result_array["BadDeviceToken"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "BadDeviceToken",  "updated_at" => DB::raw("NOW()")]);
         }
         if (count($result_array["OtherProblem"]) > 0)
         {
-            Push_notification_sent::whereIn("device_id", $result_array["OtherProblem"])->update(["status_id" => 3, "response_code" => 410, "response_string" => "OtherProblem",  "updated_at" => DB::raw("NOW()")]);
+            Push_notification_sent::whereIn("id", $result_array["OtherProblem"])->update(["status_id" => 3, "response_code" => 410, "response_string" => "OtherProblem",  "updated_at" => DB::raw("NOW()")]);
         }
     }
 
@@ -177,7 +177,7 @@ class Push_worker extends Model
         $message = "";
         foreach ($notifications as $n)
         {
-            $devices[] = $n->device_id;
+            $devices[] = $n->id;
             $title = $n->title;
             $message = $n->message;
         }
@@ -239,22 +239,21 @@ class Push_worker extends Model
         }
         if (count($result_array["success"]) > 0)
         {
-            Push_notification_sent::whereIn("device_id", $result_array["success"])->update(["status_id" => 2, "updated_at" => DB::raw("NOW()")]);
+            Push_notification_sent::whereIn("id", $result_array["success"])->update(["status_id" => 2, "updated_at" => DB::raw("NOW()")]);
         }
         if (count($result_array["InvalidRegistration"]) > 0)
         {
-            Push_notification_sent::whereIn("device_id", $result_array["InvalidRegistration"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "InvalidRegistration",  "updated_at" => DB::raw("NOW()")]);
+            Push_notification_sent::whereIn("id", $result_array["InvalidRegistration"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "InvalidRegistration",  "updated_at" => DB::raw("NOW()")]);
         }
         if (count($result_array["NotRegistered"]) > 0)
         {
-            Push_notification_sent::whereIn("device_id", $result_array["NotRegistered"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "NotRegistered",  "updated_at" => DB::raw("NOW()")]);
+            Push_notification_sent::whereIn("id", $result_array["NotRegistered"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "NotRegistered",  "updated_at" => DB::raw("NOW()")]);
         }
         if (count($result_array["InvalidPackageName"]) > 0)
         {
-            Push_notification_sent::whereIn("device_id", $result_array["InvalidPackageName"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "InvalidPackageName",  "updated_at" => DB::raw("NOW()")]);
+            Push_notification_sent::whereIn("id", $result_array["InvalidPackageName"])->update(["status_id" => 3, "response_code" => 400, "response_string" => "InvalidPackageName",  "updated_at" => DB::raw("NOW()")]);
         }
     }
-
 
     // find same device
 
